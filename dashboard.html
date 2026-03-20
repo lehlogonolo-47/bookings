@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Dashboard | BookEase</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .sidebar-link.active {
+            background: rgba(79, 70, 229, 0.1);
+            color: #4f46e5;
+            border-right: 4px solid #4f46e5;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-slate-900">
+
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col">
+            <div class="p-6 flex items-center gap-3">
+                <div
+                    class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center shadow-lg shadow-indigo-100">
+                    <span class="material-symbols-outlined text-white text-sm">calendar_add_on</span>
+                </div>
+                <span class="text-xl font-bold tracking-tight text-slate-900">BookEase</span>
+            </div>
+
+            <nav class="flex-1 mt-6">
+                <button onclick="switchTab('overview')" id="nav-overview"
+                    class="sidebar-link active w-full flex items-center gap-3 px-6 py-4 font-semibold text-sm transition-all">
+                    <span class="material-symbols-outlined">dashboard</span>
+                    Overview
+                </button>
+                <button onclick="switchTab('bookings')" id="nav-bookings"
+                    class="sidebar-link w-full flex items-center gap-3 px-6 py-4 text-slate-500 font-medium text-sm hover:bg-slate-50 transition-all">
+                    <span class="material-symbols-outlined">calendar_month</span>
+                    Bookings
+                </button>
+                <button onclick="switchTab('services')" id="nav-services"
+                    class="sidebar-link w-full flex items-center gap-3 px-6 py-4 text-slate-500 font-medium text-sm hover:bg-slate-50 transition-all">
+                    <span class="material-symbols-outlined">medical_services</span>
+                    Services
+                </button>
+                <button onclick="switchTab('settings')" id="nav-settings"
+                    class="sidebar-link w-full flex items-center gap-3 px-6 py-4 text-slate-500 font-medium text-sm hover:bg-slate-50 transition-all">
+                    <span class="material-symbols-outlined">settings</span>
+                    Settings
+                </button>
+            </nav>
+
+            <div class="p-6 border-t border-slate-100">
+                <button onclick="logout()"
+                    class="flex items-center gap-3 text-slate-400 hover:text-red-500 transition-colors font-medium text-sm">
+                    <span class="material-symbols-outlined text-sm">logout</span>
+                    Sign Out
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto">
+            <!-- Header -->
+            <header
+                class="bg-white border-b border-slate-200 h-20 flex items-center justify-between px-6 md:px-12 sticky top-0 z-10">
+                <div class="flex items-center gap-4">
+                    <h1 class="text-xl font-bold text-slate-800" id="header-title">Overview</h1>
+                    <span class="hidden md:block px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-xs font-bold"
+                        id="biz-id-tag">#ID</span>
+                </div>
+                <div class="flex items-center gap-6">
+                    <div class="flex items-center gap-3 border-l pl-6 border-slate-200">
+                        <div class="text-right">
+                            <p class="text-sm font-bold text-slate-900" id="owner-name-display">Business Owner</p>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Administrator</p>
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-slate-200 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=2574&auto=format&fit=crop"
+                                class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="p-6 md:p-12 max-w-7xl mx-auto">
+
+                <!-- OVERVIEW TAB -->
+                <div id="tab-overview" class="tab-content active space-y-10">
+                    <!-- Quick Link Card -->
+                    <div
+                        class="bg-indigo-600 rounded-3xl p-8 text-white relative overflow-hidden shadow-xl shadow-indigo-100">
+                        <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                            <div>
+                                <h2 class="text-2xl font-bold mb-2">Grow your business today</h2>
+                                <p class="text-indigo-100">Share your booking link with customers to start receiving
+                                    appointments.</p>
+                            </div>
+                            <div
+                                class="flex bg-white/10 p-2 rounded-2xl items-center gap-4 backdrop-blur-md border border-white/20">
+                                <input type="text" readonly id="share-link-input" value="bookease.me/your-biz"
+                                    class="bg-transparent border-none text-white font-bold px-4 focus:ring-0 w-48 text-sm">
+                                <button onclick="copyCurrentLink()"
+                                    class="bg-white text-indigo-600 px-6 py-2 rounded-xl font-bold text-sm hover:bg-slate-50 transition-all active:scale-95 shadow-sm">
+                                    Copy Link
+                                </button>
+                            </div>
+                        </div>
+                        <div class="absolute -top-24 -right-24 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+                    </div>
+
+                    <!-- Stats Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div
+                            class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex flex-col justify-between h-32">
+                            <div class="flex justify-between items-start">
+                                <span class="text-slate-400 font-bold text-xs uppercase tracking-widest">Total
+                                    Bookings</span>
+                                <span class="material-symbols-outlined text-indigo-600">calendar_today</span>
+                            </div>
+                            <p class="text-3xl font-black text-slate-900" id="stat-total">0</p>
+                        </div>
+                        <div
+                            class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex flex-col justify-between h-32">
+                            <div class="flex justify-between items-start">
+                                <span class="text-slate-400 font-bold text-xs uppercase tracking-widest">Est.
+                                    Revenue</span>
+                                <span class="material-symbols-outlined text-green-600">payments</span>
+                            </div>
+                            <p class="text-3xl font-black text-slate-900" id="stat-revenue">R0</p>
+                        </div>
+                        <div
+                            class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex flex-col justify-between h-32">
+                            <div class="flex justify-between items-start">
+                                <span class="text-slate-400 font-bold text-xs uppercase tracking-widest">Active
+                                    Services</span>
+                                <span class="material-symbols-outlined text-orange-600">medical_services</span>
+                            </div>
+                            <p class="text-3xl font-black text-slate-900" id="stat-services">0</p>
+                        </div>
+                        <div
+                            class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex flex-col justify-between h-32">
+                            <div class="flex justify-between items-start">
+                                <span class="text-slate-400 font-bold text-xs uppercase tracking-widest">Pending</span>
+                                <span class="material-symbols-outlined text-red-500">pending_actions</span>
+                            </div>
+                            <p class="text-3xl font-black text-slate-900" id="stat-pending">0</p>
+                        </div>
+                    </div>
+
+                    <!-- Recent Mini Table -->
+                    <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+                        <div class="p-8 border-b border-slate-100 flex items-center justify-between">
+                            <h3 class="text-xl font-bold text-slate-900">Next Appointments</h3>
+                            <button onclick="switchTab('bookings')"
+                                class="text-indigo-600 text-sm font-bold hover:underline">View All</button>
+                        </div>
+                        <div id="mini-bookings-list" class="divide-y divide-slate-50">
+                            <!-- Injected by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BOOKINGS TAB -->
+                <div id="tab-bookings" class="tab-content space-y-6">
+                    <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead>
+                                    <tr
+                                        class="bg-slate-50 text-slate-400 text-[10px] font-bold uppercase tracking-widest">
+                                        <th class="px-8 py-4">Client</th>
+                                        <th class="px-8 py-4">Service</th>
+                                        <th class="px-8 py-4">Date</th>
+                                        <th class="px-8 py-4">Price</th>
+                                        <th class="px-8 py-4">Status</th>
+                                        <th class="px-8 py-4 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bookings-tbody">
+                                    <!-- Injected by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SERVICES TAB -->
+                <div id="tab-services" class="tab-content space-y-8">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-2xl font-bold">Manage Your Services</h2>
+                        <button onclick="openServiceModal()"
+                            class="px-6 py-3 bg-indigo-600 text-white rounded-xl font-bold flex items-center gap-2 hover:bg-indigo-700 transition-all">
+                            <span class="material-symbols-outlined">add</span>
+                            Add New Service
+                        </button>
+                    </div>
+                    <div id="services-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Injected by JS -->
+                    </div>
+                </div>
+
+                <!-- SETTINGS TAB -->
+                <div id="tab-settings" class="tab-content max-w-2xl space-y-8">
+                    <div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm">
+                        <h3 class="text-xl font-bold mb-6">Business Profile</h3>
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-2">Business Name</label>
+                                <input type="text" id="edit-biz-name"
+                                    class="w-full px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-2">Description</label>
+                                <textarea id="edit-biz-desc" rows="4"
+                                    class="w-full px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-2">Contact Email</label>
+                                <input type="email" id="edit-biz-email"
+                                    class="w-full px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl">
+                            </div>
+                            <button onclick="saveProfile()"
+                                class="w-full py-4 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition-all">
+                                Save Profile Changes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- NEW SERVICE MODAL -->
+    <div id="service-modal"
+        class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl w-full max-w-md p-8 shadow-2xl">
+            <h3 class="text-2xl font-bold mb-6">Add Service</h3>
+            <div class="space-y-4">
+                <input type="text" id="new-service-name" placeholder="Service Name"
+                    class="w-full px-5 py-3 border border-slate-200 rounded-xl">
+                <input type="text" id="new-service-price" placeholder="Price (e.g. R500)"
+                    class="w-full px-5 py-3 border border-slate-200 rounded-xl">
+                <div class="flex gap-4 mt-6">
+                    <button onclick="closeServiceModal()"
+                        class="flex-1 py-3 bg-slate-100 text-slate-600 rounded-xl font-bold">Cancel</button>
+                    <button onclick="saveNewService()"
+                        class="flex-1 py-3 bg-indigo-600 text-white rounded-xl font-bold">Save Service</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let bizData = {};
+        let services = [];
+        let bookings = [];
+        let userId = null;
+
+        window.onload = async () => {
+            if (!window.supabaseClient) {
+                alert("Supabase not initialized. Check supabase-config.js");
+                return;
+            }
+
+            // 1. Get current session
+            const { data: { session }, error: authError } = await window.supabaseClient.auth.getSession();
+            
+            if (authError || !session) {
+                window.location.href = 'auth.html';
+                return;
+            }
+
+            userId = session.user.id;
+
+            // 2. Load all data
+            await loadAllData();
+            
+            switchTab('overview');
+        };
+
+        async function loadAllData() {
+            try {
+                // Fetch Business Profile
+                const { data: bData, error: bError } = await window.supabaseClient
+                    .from('businesses')
+                    .select('*')
+                    .eq('id', userId)
+                    .single();
+
+                if (bError) throw bError;
+                bizData = bData;
+
+                // Fetch Services
+                const { data: sData, error: sError } = await window.supabaseClient
+                    .from('services')
+                    .select('*')
+                    .eq('business_id', userId);
+
+                if (sError) throw sError;
+                services = sData;
+
+                // Fetch Bookings
+                const { data: bkData, error: bkError } = await window.supabaseClient
+                    .from('bookings')
+                    .select('*')
+                    .eq('business_id', userId)
+                    .order('created_at', { ascending: false });
+
+                if (bkError) throw bkError;
+                bookings = bkData;
+
+                updateUI();
+            } catch (err) {
+                console.error("Data load error:", err);
+                // alert("Error loading your data. Please try again.");
+            }
+        }
+
+        function updateUI() {
+            // Header & Sidebar info
+            const activeTabName = document.querySelector(`.sidebar-link.active`)?.textContent.trim() || 'Overview';
+            document.getElementById('header-title').textContent = activeTabName;
+            document.getElementById('biz-id-tag').textContent = `#${bizData.slug || 'ID'}`;
+            document.getElementById('owner-name-display').textContent = bizData.name;
+
+            // Share link
+            const shareLink = window.location.origin + window.location.pathname.replace('dashboard.html', 'booking.html') + '?id=' + bizData.slug;
+            document.getElementById('share-link-input').value = shareLink;
+
+            // Stats
+            document.getElementById('stat-total').textContent = bookings.length;
+            document.getElementById('stat-services').textContent = services.length;
+            document.getElementById('stat-pending').textContent = bookings.filter(b => b.status === 'pending').length;
+
+            let revenue = 0;
+            bookings.filter(b => b.status === 'approved').forEach(b => {
+                const priceStr = b.service_price.replace(/[^0-9.]/g, '');
+                revenue += parseFloat(priceStr) || 0;
+            });
+            document.getElementById('stat-revenue').textContent = 'R' + revenue.toLocaleString();
+
+            renderBookings();
+            renderServices();
+            fillSettings();
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            document.getElementById(`nav-${tabId}`).classList.add('active');
+
+            document.getElementById('header-title').textContent = tabId.charAt(0).toUpperCase() + tabId.slice(1);
+        }
+
+        function renderBookings() {
+            const tbody = document.getElementById('bookings-tbody');
+            const miniList = document.getElementById('mini-bookings-list');
+
+            if (bookings.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="px-8 py-20 text-center text-slate-400">No bookings yet</td></tr>';
+                miniList.innerHTML = '<div class="p-8 text-center text-slate-400">No upcoming bookings</div>';
+                return;
+            }
+
+            // Main Table
+            tbody.innerHTML = '';
+            bookings.forEach((booking) => {
+                const row = document.createElement('tr');
+                row.className = 'border-t border-slate-50 hover:bg-slate-50/50 transition-all';
+                row.innerHTML = `
+                    <td class="px-8 py-5">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs font-bold">${booking.client_name.charAt(0)}</div>
+                            <div class="text-sm">
+                                <p class="font-bold text-slate-900">${booking.client_name}</p>
+                                <p class="text-slate-400 text-xs">${booking.client_email}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-8 py-5 text-sm font-medium text-slate-600">${booking.service_name}</td>
+                    <td class="px-8 py-5 text-sm text-slate-500">${booking.booking_date}</td>
+                    <td class="px-8 py-5 text-sm font-bold text-slate-900">${booking.service_price}</td>
+                    <td class="px-8 py-5">
+                        <span class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${getStatusClass(booking.status)}">
+                            ${booking.status}
+                        </span>
+                    </td>
+                    <td class="px-8 py-5 text-right">
+                        <div class="flex items-center justify-end gap-2">
+                            ${booking.status === 'pending' ? `
+                                <button onclick="updateBookingStatus('${booking.id}', 'approved')" class="p-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-600 hover:text-white transition-all"><span class="material-symbols-outlined text-sm">check</span></button>
+                                <button onclick="updateBookingStatus('${booking.id}', 'rejected')" class="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-all"><span class="material-symbols-outlined text-sm">close</span></button>
+                            ` : ''}
+                            <button onclick="deleteBooking('${booking.id}')" class="p-2 text-slate-400 hover:text-red-500 transition-colors"><span class="material-symbols-outlined text-sm">delete</span></button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            // Mini List (Overview) - Top 3
+            miniList.innerHTML = '';
+            bookings.slice(0, 3).forEach(b => {
+                const item = document.createElement('div');
+                item.className = 'p-6 flex items-center justify-between';
+                item.innerHTML = `
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 font-bold">${b.client_name.charAt(0)}</div>
+                        <div>
+                            <p class="font-bold text-sm">${b.client_name}</p>
+                            <p class="text-xs text-slate-400">${b.service_name} • ${b.booking_date}</p>
+                        </div>
+                    </div>
+                    <span class="text-xs font-bold text-indigo-600">${b.service_price}</span>
+                `;
+                miniList.appendChild(item);
+            });
+        }
+
+        function getStatusClass(status) {
+            switch (status) {
+                case 'approved': return 'bg-green-100 text-green-700';
+                case 'rejected': return 'bg-red-100 text-red-700';
+                default: return 'bg-orange-100 text-orange-700';
+            }
+        }
+
+        function renderServices() {
+            const grid = document.getElementById('services-grid');
+            grid.innerHTML = '';
+            services.forEach((s) => {
+                const card = document.createElement('div');
+                card.className = 'bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex items-center justify-between group';
+                card.innerHTML = `
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600">
+                            <span class="material-symbols-outlined">medical_services</span>
+                        </div>
+                        <div>
+                            <p class="font-bold text-slate-900">${s.name}</p>
+                            <p class="text-sm font-semibold text-indigo-500">${s.price}</p>
+                        </div>
+                    </div>
+                    <button onclick="deleteService('${s.id}')" class="opacity-0 group-hover:opacity-100 p-2 text-slate-400 hover:text-red-500 transition-all">
+                        <span class="material-symbols-outlined">delete</span>
+                    </button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function fillSettings() {
+            document.getElementById('edit-biz-name').value = bizData.name || '';
+            document.getElementById('edit-biz-desc').value = bizData.description || '';
+            document.getElementById('edit-biz-email').value = bizData.email || '';
+        }
+
+        // Actions
+        async function updateBookingStatus(id, status) {
+            try {
+                const { error } = await window.supabaseClient
+                    .from('bookings')
+                    .update({ status: status })
+                    .eq('id', id);
+
+                if (error) throw error;
+                await loadAllData();
+            } catch (err) {
+                alert("Error updating booking: " + err.message);
+            }
+        }
+
+        async function deleteBooking(id) {
+            if (confirm('Delete this booking record?')) {
+                try {
+                    const { error } = await window.supabaseClient
+                        .from('bookings')
+                        .delete()
+                        .eq('id', id);
+
+                    if (error) throw error;
+                    await loadAllData();
+                } catch (err) {
+                    alert("Error deleting booking: " + err.message);
+                }
+            }
+        }
+
+        async function saveProfile() {
+            const updatedBiz = {
+                name: document.getElementById('edit-biz-name').value,
+                description: document.getElementById('edit-biz-desc').value,
+                email: document.getElementById('edit-biz-email').value
+            };
+
+            try {
+                const { error } = await window.supabaseClient
+                    .from('businesses')
+                    .update(updatedBiz)
+                    .eq('id', userId);
+
+                if (error) throw error;
+                
+                await loadAllData();
+                alert('Profile updated successfully!');
+            } catch (err) {
+                alert("Error saving profile: " + err.message);
+            }
+        }
+
+        function openServiceModal() { document.getElementById('service-modal').classList.remove('hidden'); }
+        function closeServiceModal() { document.getElementById('service-modal').classList.add('hidden'); }
+
+        async function saveNewService() {
+            const name = document.getElementById('new-service-name').value;
+            const price = document.getElementById('new-service-price').value;
+            
+            if (name && price) {
+                try {
+                    const { error } = await window.supabaseClient
+                        .from('services')
+                        .insert([{
+                            business_id: userId,
+                            name: name,
+                            price: price
+                        }]);
+
+                    if (error) throw error;
+
+                    await loadAllData();
+                    closeServiceModal();
+                    document.getElementById('new-service-name').value = '';
+                    document.getElementById('new-service-price').value = '';
+                } catch (err) {
+                    alert("Error adding service: " + err.message);
+                }
+            }
+        }
+
+        async function deleteService(id) {
+            if (confirm('Delete this service?')) {
+                try {
+                    const { error } = await window.supabaseClient
+                        .from('services')
+                        .delete()
+                        .eq('id', id);
+
+                    if (error) throw error;
+                    await loadAllData();
+                } catch (err) {
+                    alert("Error deleting service: " + err.message);
+                }
+            }
+        }
+
+        function copyCurrentLink() {
+            const input = document.getElementById('share-link-input');
+            input.select();
+            document.execCommand('copy');
+            alert('Link copied to clipboard!');
+        }
+
+        async function logout() {
+            if (confirm('Are you sure you want to sign out?')) {
+                await window.supabaseClient.auth.signOut();
+                localStorage.removeItem('bookease_session');
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
+</body>
+
+</html>

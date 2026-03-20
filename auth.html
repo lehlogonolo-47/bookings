@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | BookEase</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-[#F9FAFB] min-h-screen flex items-center justify-center p-4">
+
+    <div class="w-full max-w-md">
+        <div class="text-center mb-10">
+            <div class="inline-flex items-center gap-2 mb-4">
+                <div
+                    class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-200">
+                    <span class="material-symbols-outlined text-white">calendar_add_on</span>
+                </div>
+                <span class="text-2xl font-bold tracking-tight text-slate-900">BookEase</span>
+            </div>
+            <h1 class="text-3xl font-extrabold text-slate-900">Welcome Back</h1>
+            <p class="text-slate-500 mt-2">Sign in to manage your appointments</p>
+        </div>
+
+        <div class="bg-white rounded-3xl p-8 border border-slate-100 shadow-xl shadow-indigo-50">
+            <div id="login-form" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Email Address</label>
+                    <input type="email" id="login-email" placeholder="name@business.com"
+                        class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 transition-all">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Password</label>
+                    <input type="password" id="login-pass" placeholder="••••••••"
+                        class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 transition-all">
+                </div>
+                <button onclick="handleLogin()"
+                    class="w-full py-4 bg-indigo-600 text-white rounded-xl font-bold text-lg hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200">
+                    Sign In
+                </button>
+            </div>
+
+            <div class="mt-8 pt-8 border-t border-slate-100 text-center">
+                <p class="text-slate-500 text-sm">Don't have a business profile yet?</p>
+                <a href="signup.html" class="text-indigo-600 font-bold hover:underline mt-1 inline-block">Register your
+                    business</a>
+            </div>
+        </div>
+
+        <p class="text-center text-slate-400 text-xs mt-10">© 2026 BookEase Platform. Secure Login.</p>
+    </div>
+
+    <script>
+        async function handleLogin() {
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-pass').value;
+
+            if (!email || !pass) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            if (!window.supabaseClient) {
+                alert("Supabase is not correctly initialized. This might be due to a network error loading the Supabase library.");
+                return;
+            }
+
+            try {
+                // Connection pre-check
+                try {
+                    await fetch(`${window.SUPABASE_CONFIG.url}/auth/v1/health`, {
+                        headers: { 'apikey': window.SUPABASE_CONFIG.key }
+                    });
+                } catch (e) {
+                    if (window.location.protocol === 'file:') {
+                        const useOffline = confirm("Login failed to connect. This usually happens when opening the HTML file directly (file://) instead of using a server.\n\nWould you like to try OFFLINE LOGIN (LocalStorage) instead?");
+                        if (useOffline) return loginOffline(email, pass);
+                    }
+                }
+
+                // Supabase Auth Login
+                const { data, error } = await window.supabaseClient.auth.signInWithPassword({
+                    email: email,
+                    password: pass
+                });
+
+                if (error) {
+                    if (error.message.includes('fetch')) throw new Error('Failed to fetch');
+                    throw error;
+                }
+
+                if (data.user) {
+                    localStorage.setItem('bookease_session', email.toLowerCase());
+                    window.location.href = 'dashboard.html';
+                }
+            } catch (err) {
+                console.error("Login error:", err);
+                if (err.message.includes('fetch') && window.location.protocol === 'file:') {
+                    const useOffline = confirm("Network Error: " + err.message + "\n\nWould you like to try OFFLINE LOGIN (LocalStorage) instead?");
+                    if (useOffline) return loginOffline(email, pass);
+                }
+                alert('Login failed: ' + err.message);
+            }
+        }
+
+        function loginOffline(email, pass) {
+            const users = JSON.parse(localStorage.getItem('bookease_users')) || {};
+            const user = users[email.toLowerCase()];
+
+            if (user && user.password === pass) {
+                localStorage.setItem('bookease_session', email.toLowerCase());
+                localStorage.setItem('lastCreatedBusiness', JSON.stringify(user));
+                window.location.href = 'dashboard.html';
+                return true;
+            } else {
+                alert("Offline Login failed: User not found locally or password incorrect.");
+                return false;
+            }
+        }
+    </script>
+
+</body>
+
+</html>
