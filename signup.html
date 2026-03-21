@@ -279,7 +279,8 @@
                     if (!testResponse.ok && testResponse.status !== 401) throw new Error("Connection failed");
                 } catch (e) {
                     console.warn("Connection pre-check failed:", e);
-                    if (isLocalFile || e.message.includes('fetch')) {
+                    const hasFetch = e && e.message && e.message.includes('fetch');
+                    if (isLocalFile || hasFetch) {
                         const useLocal = confirm("We are having trouble connecting to the database.\n\nThis usually happens if you are opening the file directly (file://) or have network issues.\n\nWould you like to continue using OFFLINE MODE (LocalStorage) for now?");
                         if (useLocal) return useOfflineModeFallback(name, desc, email, pass, services);
                     }
@@ -292,7 +293,7 @@
                 });
 
                 if (authError) {
-                    if (authError.message.includes('fetch')) throw new Error('Failed to fetch');
+                    if (authError && authError.message && authError.message.includes('fetch')) throw new Error('Failed to fetch');
                     throw authError;
                 }
 
@@ -339,11 +340,12 @@
                 return true;
             } catch (err) {
                 console.error("Signup error:", err);
-                if (err.message.includes('fetch') || isLocalFile) {
-                    const fallback = confirm("Connection Error: " + err.message + "\n\nWould you like to use OFFLINE MODE instead? (Data will only be saved locally on this browser)");
+                const hasFetchError = err && err.message && err.message.includes('fetch');
+                if (hasFetchError || isLocalFile) {
+                    const fallback = confirm("Connection Error: " + (err.message || 'Unknown error') + "\n\nWould you like to use OFFLINE MODE instead? (Data will only be saved locally on this browser)");
                     if (fallback) return useOfflineModeFallback(name, desc, email, pass, services);
                 }
-                alert("Error setting up your profile: " + err.message);
+                alert("Error setting up your profile: " + (err.message || JSON.stringify(err)));
                 return false;
             }
         }

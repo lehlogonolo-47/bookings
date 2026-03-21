@@ -7,7 +7,7 @@
 // If using CDN, this is how you initialize it in the browser:
 // <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-const SUPABASE_URL = 'https://vqhopswwjfjystwsvuyy.supabase.co';
+const SUPABASE_URL = 'https://vqhopsrwjfjystwsvuyy.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZxaG9wc3J3amZqeXN0d3N2dXl5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1MzUyNzIsImV4cCI6MjA4ODExMTI3Mn0.jiWlLZHgrJkB0Bj024KJXlwcdJlfh42T96GsYi_6p60';
 
 window.SUPABASE_CONFIG = { url: SUPABASE_URL, key: SUPABASE_KEY };
