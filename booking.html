@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Business Booking Page</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
@@ -27,31 +27,31 @@
 <body class="bg-slate-50 text-slate-900">
 
     <!-- Header Section -->
-    <div class="bg-white border-b border-slate-200 pt-16 pb-12 px-4 shadow-sm">
+    <div id="theme-header" class="bg-white border-b border-slate-200 pt-16 pb-12 px-4 shadow-sm transition-colors duration-500">
         <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-8">
             <div id="biz-logo"
-                class="w-32 h-32 rounded-3xl bg-indigo-600 flex items-center justify-center text-white shadow-xl shadow-indigo-100">
-                <span class="material-symbols-outlined text-5xl">storefront</span>
+                class="w-32 h-32 rounded-3xl bg-indigo-600 flex items-center justify-center text-white shadow-xl shadow-indigo-100 transition-colors duration-500">
+                <span id="biz-logo-icon" class="material-symbols-outlined text-5xl">storefront</span>
             </div>
             <div class="text-center md:text-left flex-1">
                 <div class="flex items-center gap-2 justify-center md:justify-start mb-2">
-                    <span
-                        class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full font-bold uppercase tracking-wider">Verified
+                    <span id="theme-badge"
+                        class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full font-bold uppercase tracking-wider transition-colors duration-500">Verified
                         Business</span>
                 </div>
-                <h1 id="biz-name-title" class="text-4xl font-extrabold text-slate-900 mb-3 tracking-tight">Business Name
+                <h1 id="biz-name-title" class="text-4xl font-extrabold text-slate-900 mb-3 tracking-tight transition-colors duration-500">Business Name
                 </h1>
-                <p id="biz-desc-text" class="text-lg text-slate-600 leading-relaxed max-w-2xl">This is where the
+                <p id="biz-desc-text" class="text-lg text-slate-600 leading-relaxed max-w-2xl transition-colors duration-500">This is where the
                     business description will be displayed to your clients.</p>
 
                 <div class="flex flex-wrap gap-4 mt-6 justify-center md:justify-start">
-                    <div class="flex items-center gap-2 text-slate-500 bg-slate-100 px-3 py-1.5 rounded-lg text-sm">
+                    <div id="theme-pill-1" class="flex items-center gap-2 text-slate-500 bg-slate-100 px-3 py-1.5 rounded-lg text-sm transition-colors duration-500">
                         <span class="material-symbols-outlined text-sm">location_on</span>
                         <span>Full Service Available</span>
                     </div>
-                    <div
-                        class="flex items-center gap-2 text-slate-500 bg-slate-100 px-3 py-1.5 rounded-lg text-sm font-medium">
-                        <span class="material-symbols-outlined text-sm text-green-500">check_circle</span>
+                    <div id="theme-pill-2" 
+                        class="flex items-center gap-2 text-slate-500 bg-slate-100 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-500">
+                        <span id="theme-pill-icon" class="material-symbols-outlined text-sm text-green-500">check_circle</span>
                         <span id="biz-email-text">contact@business.com</span>
                     </div>
                 </div>
@@ -65,7 +65,7 @@
         <!-- Services Section -->
         <div class="lg:col-span-2 space-y-8">
             <div class="flex items-center justify-between">
-                <h2 class="text-2xl font-bold text-slate-900">Choose a Service</h2>
+                <h2 id="theme-services-title" class="text-2xl font-bold text-slate-900 transition-colors duration-500">Choose a Service</h2>
                 <span id="service-count" class="text-sm font-semibold text-slate-400">0 Services</span>
             </div>
 
@@ -80,26 +80,15 @@
 
         <!-- Sidebar / Booking Stats -->
         <div class="space-y-6">
-            <div class="bg-indigo-600 rounded-3xl p-8 text-white shadow-xl shadow-indigo-200 sticky top-8">
+            <div id="theme-sidebar" class="bg-indigo-600 rounded-3xl p-8 text-white shadow-xl shadow-indigo-200 sticky top-8 transition-colors duration-500">
                 <h3 class="text-xl font-bold mb-4">Availability</h3>
-                <p class="text-indigo-100 text-sm mb-6 leading-relaxed">Most businesses on BookEase respond within 2
+                <p id="theme-sidebar-desc" class="text-indigo-100 text-sm mb-6 leading-relaxed transition-colors duration-500">Most businesses on L-CONNECT respond within 2
                     hours. Select a service to see available time slots.</p>
-                <div class="space-y-4 mb-8">
-                    <div class="flex justify-between items-center text-sm border-b border-indigo-500/30 pb-3">
-                        <span class="text-indigo-200">Monday - Friday</span>
-                        <span class="font-bold">9:00 - 18:00</span>
-                    </div>
-                    <div class="flex justify-between items-center text-sm border-b border-indigo-500/30 pb-3">
-                        <span class="text-indigo-200">Saturday</span>
-                        <span class="font-bold">10:00 - 16:00</span>
-                    </div>
-                    <div class="flex justify-between items-center text-sm">
-                        <span class="text-indigo-200">Sunday</span>
-                        <span class="font-bold text-indigo-300">Closed</span>
-                    </div>
+                <div class="space-y-4 mb-8" id="availability-container">
+                    <!-- Injected by JS -->
                 </div>
                 <button
-                    class="w-full bg-white text-indigo-600 py-4 rounded-2xl font-bold shadow-lg hover:bg-slate-50 transition-all active:scale-95">
+                    id="theme-sidebar-btn" class="w-full bg-white text-indigo-600 py-4 rounded-2xl font-bold shadow-lg hover:bg-slate-50 transition-all active:scale-95">
                     Contact Business
                 </button>
             </div>
@@ -126,13 +115,20 @@
                 <div class="space-y-4">
                     <input type="text" placeholder="Your Name"
                         class="w-full px-5 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20">
-                    <input type="email" placeholder="Your Email"
+                    <input type="email" placeholder="Your Email" id="booking-email"
                         class="w-full px-5 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20">
-                    <input type="date"
+                    <input type="date" id="booking-date-input"
                         class="w-full px-5 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20">
+                    <div id="time-slots-container" class="hidden">
+                        <p class="text-sm font-bold text-slate-700 mb-2">Select a Time</p>
+                        <div id="time-slots-grid" class="grid grid-cols-3 gap-2 max-h-40 overflow-y-auto pr-1">
+                            <!-- JS injected slot buttons -->
+                        </div>
+                        <p id="time-slots-message" class="text-sm text-slate-500 hidden"></p>
+                    </div>
                 </div>
-                <button onclick="confirmBooking()"
-                    class="w-full py-4 bg-indigo-600 text-white rounded-2xl font-bold hover:bg-indigo-700 transition-all">
+                <button onclick="confirmBooking()" id="confirm-booking-btn"
+                    class="w-full py-4 bg-indigo-600 text-white rounded-2xl font-bold hover:bg-indigo-700 transition-all opacity-50 cursor-not-allowed">
                     Confirm Booking
                 </button>
             </div>
@@ -141,6 +137,133 @@
 
     <script>
         let businessId = null;
+        let globalBizData = null;
+        let selectedTimeSlot = null;
+
+        function showToast(message, type = 'success') {
+            let container = document.getElementById('toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'toast-container';
+                container.className = 'fixed bottom-6 right-6 z-[100] flex flex-col gap-3 pointer-events-none';
+                document.body.appendChild(container);
+            }
+            const toast = document.createElement('div');
+            const bgClass = type === 'success' ? 'bg-slate-800' : (type === 'error' ? 'bg-red-500' : 'bg-indigo-600');
+            const icon = type === 'success' ? 'check_circle' : (type === 'error' ? 'error' : 'info');
+            toast.className = `flex items-center gap-3 px-6 py-4 rounded-xl shadow-2xl text-white transform transition-all duration-300 translate-y-10 opacity-0 pointer-events-auto ${bgClass}`;
+            toast.innerHTML = `<span class="material-symbols-outlined">${icon}</span><span class="font-bold text-sm">${message}</span>`;
+            container.appendChild(toast);
+            
+            requestAnimationFrame(() => {
+                toast.classList.remove('translate-y-10', 'opacity-0');
+            });
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+
+        const themes = {
+            classic: {
+                body: "bg-slate-50 text-slate-900 font-inter",
+                header: "bg-white border-b border-slate-200 pt-16 pb-12 px-4 shadow-sm transition-colors duration-500",
+                logo: "w-32 h-32 rounded-3xl bg-indigo-600 flex items-center justify-center text-white shadow-xl shadow-indigo-100 transition-colors duration-500",
+                badge: "text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full font-bold uppercase tracking-wider transition-colors duration-500",
+                title: "text-4xl font-extrabold text-slate-900 mb-3 tracking-tight transition-colors duration-500",
+                desc: "text-lg text-slate-600 leading-relaxed max-w-2xl transition-colors duration-500",
+                pill1: "flex items-center gap-2 text-slate-500 bg-slate-100 px-3 py-1.5 rounded-lg text-sm transition-colors duration-500",
+                pill2: "flex items-center gap-2 text-slate-500 bg-slate-100 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-500",
+                servicesTitle: "text-2xl font-bold text-slate-900 transition-colors duration-500",
+                sidebar: "bg-indigo-600 rounded-3xl p-8 text-white shadow-xl shadow-indigo-200 sticky top-8 transition-colors duration-500",
+                sidebarDesc: "text-indigo-100 text-sm mb-6 leading-relaxed transition-colors duration-500",
+                sidebarLabelClass: "text-indigo-200",
+                sidebarClosedClass: "font-bold text-indigo-300",
+                sidebarBorderClass: "border-indigo-500/30",
+                sidebarBtn: "w-full bg-white text-indigo-600 py-4 rounded-2xl font-bold shadow-lg hover:bg-slate-50 transition-all active:scale-95",
+                cardClass: "booking-card bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between group cursor-pointer hover:border-indigo-300 transition-all",
+                cardIconBgClass: "w-14 h-14 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600",
+                cardIconClass: "material-symbols-outlined text-2xl font-bold",
+                cardTitleClass: "font-bold text-slate-800 text-lg group-hover:text-indigo-700 transition-colors",
+                cardPriceClass: "text-sm font-semibold text-indigo-500",
+                cardChevronBgClass: "w-10 h-10 rounded-full bg-slate-50 group-hover:bg-indigo-600 group-hover:text-white flex items-center justify-center transition-all text-slate-400"
+            },
+            modern: {
+                body: "bg-slate-900 text-slate-100 !font-['Space_Grotesk']",
+                header: "bg-slate-800 border-b border-slate-700 pt-16 pb-12 px-4 shadow-lg transition-colors duration-500",
+                logo: "w-32 h-32 rounded-lg bg-emerald-500 flex items-center justify-center text-emerald-950 shadow-xl shadow-emerald-900/50 transition-colors duration-500",
+                badge: "text-xs px-2 py-1 bg-emerald-900/50 text-emerald-400 rounded-md font-bold uppercase tracking-wider transition-colors duration-500",
+                title: "text-4xl font-extrabold text-white mb-3 tracking-tight transition-colors duration-500",
+                desc: "text-lg text-slate-400 leading-relaxed max-w-2xl transition-colors duration-500",
+                pill1: "flex items-center gap-2 text-slate-400 bg-slate-800 px-3 py-1.5 rounded-md text-sm transition-colors duration-500",
+                pill2: "flex items-center gap-2 text-slate-400 bg-slate-800 px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-500",
+                servicesTitle: "text-2xl font-bold text-white transition-colors duration-500",
+                sidebar: "bg-slate-800 border border-slate-700 rounded-xl p-8 text-white shadow-2xl sticky top-8 transition-colors duration-500",
+                sidebarDesc: "text-slate-400 text-sm mb-6 leading-relaxed transition-colors duration-500",
+                sidebarLabelClass: "text-slate-400",
+                sidebarClosedClass: "font-bold text-slate-500",
+                sidebarBorderClass: "border-slate-700",
+                sidebarBtn: "w-full bg-emerald-500 text-emerald-950 py-4 rounded-lg font-bold shadow-lg hover:bg-emerald-400 transition-all active:scale-95",
+                cardClass: "booking-card bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-md flex items-center justify-between group cursor-pointer hover:border-emerald-500 transition-all",
+                cardIconBgClass: "w-14 h-14 bg-emerald-900/30 rounded-lg flex items-center justify-center text-emerald-400",
+                cardIconClass: "material-symbols-outlined text-2xl font-normal",
+                cardTitleClass: "font-bold text-white text-lg group-hover:text-emerald-400 transition-colors",
+                cardPriceClass: "text-sm font-semibold text-emerald-500",
+                cardChevronBgClass: "w-10 h-10 rounded-lg bg-slate-700 group-hover:bg-emerald-500 group-hover:text-emerald-950 flex items-center justify-center transition-all text-slate-400"
+            },
+            playful: {
+                body: "bg-pink-50 text-slate-800 !font-['Quicksand']",
+                header: "bg-white border-b-4 border-rose-100 pt-16 pb-12 px-4 shadow-sm transition-colors duration-500",
+                logo: "w-32 h-32 rounded-full bg-rose-500 flex items-center justify-center text-white shadow-xl shadow-rose-200 transition-colors duration-500",
+                badge: "text-xs px-3 py-1 bg-pink-100 text-pink-700 rounded-full font-extrabold uppercase tracking-wider transition-colors duration-500",
+                title: "text-4xl font-black text-slate-900 mb-3 tracking-tight transition-colors duration-500",
+                desc: "text-lg text-slate-600 leading-relaxed max-w-2xl font-medium transition-colors duration-500",
+                pill1: "flex items-center gap-2 text-slate-600 bg-white shadow-sm border border-rose-50 px-4 py-2 rounded-full text-sm font-bold transition-colors duration-500",
+                pill2: "flex items-center gap-2 text-slate-600 bg-white shadow-sm border border-rose-50 px-4 py-2 rounded-full text-sm font-bold transition-colors duration-500",
+                servicesTitle: "text-2xl font-black text-rose-600 transition-colors duration-500",
+                sidebar: "bg-white border-4 border-rose-100 rounded-[2rem] p-8 text-slate-800 shadow-xl shadow-rose-100/50 sticky top-8 transition-colors duration-500",
+                sidebarDesc: "text-slate-500 text-sm mb-6 leading-relaxed font-medium transition-colors duration-500",
+                sidebarLabelClass: "text-slate-400 font-bold",
+                sidebarClosedClass: "font-bold text-rose-300",
+                sidebarBorderClass: "border-rose-100",
+                sidebarBtn: "w-full bg-rose-500 text-white py-4 rounded-full font-black shadow-lg shadow-rose-200 hover:bg-rose-600 hover:-translate-y-1 transition-all active:scale-95",
+                cardClass: "booking-card bg-white p-6 rounded-[2rem] border-4 border-rose-50 shadow-sm flex items-center justify-between group cursor-pointer hover:border-rose-200 hover:-translate-y-1 transition-all",
+                cardIconBgClass: "w-14 h-14 bg-pink-50 rounded-full flex items-center justify-center text-rose-500",
+                cardIconClass: "material-symbols-outlined text-3xl font-bold",
+                cardTitleClass: "font-black text-slate-800 text-lg group-hover:text-rose-600 transition-colors",
+                cardPriceClass: "text-sm font-extrabold text-pink-500",
+                cardChevronBgClass: "w-10 h-10 rounded-full bg-rose-50 group-hover:bg-rose-500 group-hover:text-white flex items-center justify-center transition-all text-rose-400"
+            }
+        };
+
+        window.currentThemeConfig = themes.classic;
+
+        function applyTheme(themeId) {
+            const theme = themes[themeId] || themes.classic;
+            window.currentThemeConfig = theme;
+
+            document.body.className = theme.body;
+            document.getElementById('theme-header').className = theme.header;
+            document.getElementById('biz-logo').className = theme.logo;
+            document.getElementById('theme-badge').className = theme.badge;
+            document.getElementById('biz-name-title').className = theme.title;
+            document.getElementById('biz-desc-text').className = theme.desc;
+            document.getElementById('theme-pill-1').className = theme.pill1;
+            document.getElementById('theme-pill-2').className = theme.pill2;
+            document.getElementById('theme-services-title').className = theme.servicesTitle;
+            document.getElementById('theme-sidebar').className = theme.sidebar;
+            document.getElementById('theme-sidebar-desc').className = theme.sidebarDesc;
+            document.getElementById('theme-sidebar-btn').className = theme.sidebarBtn;
+
+            document.querySelectorAll('.theme-sidebar-label').forEach(el => el.className = `theme-sidebar-label ${theme.sidebarLabelClass}`);
+            document.querySelectorAll('.theme-sidebar-closed').forEach(el => el.className = `theme-sidebar-closed ${theme.sidebarClosedClass}`);
+            document.querySelectorAll('.theme-sidebar-border').forEach(el => el.className = `flex justify-between items-center text-sm border-b pb-3 theme-sidebar-border ${theme.sidebarBorderClass}`);
+            
+            if (window.currentServicesData) {
+                renderServices(window.currentServicesData);
+            }
+        }
 
         window.onload = async () => {
             const params = new URLSearchParams(window.location.search);
@@ -167,6 +290,7 @@
                 if (bizError || !bizData) throw new Error("Profile Not Found");
 
                 businessId = bizData.id;
+                globalBizData = bizData;
 
                 // 2. Fetch services for this business
                 const { data: services, error: servError } = await window.supabaseClient
@@ -191,29 +315,86 @@
             document.title = data.name + ' - Booking Page';
             document.getElementById('biz-desc-text').textContent = data.description;
             document.getElementById('biz-email-text').textContent = data.email;
+
+            const logoContainer = document.getElementById('biz-logo');
+            if (data.profile_picture) {
+                logoContainer.innerHTML = `<img src="${data.profile_picture}" class="w-full h-full object-cover" style="border-radius: inherit;" alt="Business Logo">`;
+            } else {
+                logoContainer.innerHTML = `<span id="biz-logo-icon" class="material-symbols-outlined text-5xl">storefront</span>`;
+            }
+            
+            renderWorkingHours(data.working_hours);
+            applyTheme(data.theme_id || 'classic');
+        }
+
+        function renderWorkingHours(workingHours) {
+            const container = document.getElementById('availability-container');
+            container.innerHTML = '';
+            
+            const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+            const defaultHours = {
+                monday: { isOpen: true, openTime: '09:00', closeTime: '18:00' },
+                tuesday: { isOpen: true, openTime: '09:00', closeTime: '18:00' },
+                wednesday: { isOpen: true, openTime: '09:00', closeTime: '18:00' },
+                thursday: { isOpen: true, openTime: '09:00', closeTime: '18:00' },
+                friday: { isOpen: true, openTime: '09:00', closeTime: '18:00' },
+                saturday: { isOpen: true, openTime: '10:00', closeTime: '16:00' },
+                sunday: { isOpen: false }
+            };
+
+            const hours = workingHours && Object.keys(workingHours).length > 0 ? workingHours : defaultHours;
+            const theme = window.currentThemeConfig || themes.classic;
+
+            days.forEach((day, index) => {
+                const dayData = hours[day];
+                const isLast = index === days.length - 1;
+                
+                const wrapper = document.createElement('div');
+                wrapper.className = `flex justify-between items-center text-sm ${!isLast ? 'border-b pb-3 theme-sidebar-border ' + theme.sidebarBorderClass : ''}`;
+                
+                const label = document.createElement('span');
+                label.className = `theme-sidebar-label ${theme.sidebarLabelClass} capitalize`;
+                label.textContent = day;
+                wrapper.appendChild(label);
+                
+                const timeStr = document.createElement('span');
+                if (dayData.isOpen) {
+                    timeStr.className = 'font-bold';
+                    timeStr.textContent = `${dayData.openTime} - ${dayData.closeTime}`;
+                } else {
+                    timeStr.className = `theme-sidebar-closed ${theme.sidebarClosedClass}`;
+                    timeStr.textContent = 'Closed';
+                }
+                wrapper.appendChild(timeStr);
+                
+                container.appendChild(wrapper);
+            });
         }
 
         function renderServices(services) {
+            window.currentServicesData = services;
             document.getElementById('service-count').textContent = `${services.length} Services`;
 
             const grid = document.getElementById('services-grid');
             grid.innerHTML = '';
+            
+            const theme = window.currentThemeConfig;
 
             services.forEach(service => {
                 const card = document.createElement('div');
-                card.className = 'booking-card bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between group cursor-pointer hover:border-indigo-300 transition-all';
+                card.className = theme.cardClass;
                 card.onclick = () => openBooking(service);
                 card.innerHTML = `
                         <div class="flex items-center gap-5">
-                            <div class="w-14 h-14 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600">
-                                <span class="material-symbols-outlined text-2xl font-bold">medical_services</span>
+                            <div class="${theme.cardIconBgClass}">
+                                <span class="${theme.cardIconClass}">medical_services</span>
                             </div>
                             <div>
-                                <h4 class="font-bold text-slate-800 text-lg group-hover:text-indigo-700 transition-colors">${service.name}</h4>
-                                <p class="text-sm font-semibold text-indigo-500">${service.price}</p>
+                                <h4 class="${theme.cardTitleClass}">${service.name}</h4>
+                                <p class="${theme.cardPriceClass}">${service.price}</p>
                             </div>
                         </div>
-                        <div class="w-10 h-10 rounded-full bg-slate-50 group-hover:bg-indigo-600 group-hover:text-white flex items-center justify-center transition-all text-slate-400">
+                        <div class="${theme.cardChevronBgClass}">
                             <span class="material-symbols-outlined">chevron_right</span>
                         </div>
                     `;
@@ -242,6 +423,11 @@
             document.getElementById('selected-service-name').textContent = service.name;
             document.getElementById('selected-service-price').textContent = service.price;
 
+            document.getElementById('booking-date-input').value = '';
+            document.getElementById('time-slots-container').classList.add('hidden');
+            selectedTimeSlot = null;
+            updateConfirmButtonState();
+
             modal.classList.remove('hidden');
             setTimeout(() => {
                 content.classList.remove('scale-95', 'opacity-0');
@@ -261,13 +447,13 @@
 
         async function confirmBooking() {
             const clientName = document.querySelector('input[placeholder="Your Name"]').value;
-            const clientEmail = document.querySelector('input[placeholder="Your Email"]').value;
-            const date = document.querySelector('input[type="date"]').value;
+            const clientEmail = document.querySelector('input[placeholder="Your Email"]')?.value || document.getElementById('booking-email').value;
+            const date = document.getElementById('booking-date-input').value;
             const serviceName = document.getElementById('selected-service-name').textContent;
             const servicePrice = document.getElementById('selected-service-price').textContent;
 
-            if (!clientName || !clientEmail || !date) {
-                alert('Please fill in all details');
+            if (!clientName || !clientEmail || !date || !selectedTimeSlot) {
+                showToast('Please select a date and time slot, and fill all details.', 'error');
                 return;
             }
 
@@ -279,6 +465,7 @@
                         client_name: clientName,
                         client_email: clientEmail,
                         booking_date: date,
+                        booking_time: selectedTimeSlot,
                         service_name: serviceName,
                         service_price: servicePrice,
                         status: 'pending'
@@ -286,11 +473,127 @@
 
                 if (error) throw error;
 
-                alert('Booking request sent successfully!');
+                showToast('Booking request sent successfully!', 'success');
                 closeModal();
             } catch (err) {
                 console.error("Booking error:", err);
-                alert("Failed to submit booking: " + err.message);
+                showToast("Failed to submit booking: " + err.message, "error");
+            }
+        }
+
+        document.getElementById('booking-date-input').addEventListener('change', function(e) {
+            generateTimeSlots(e.target.value);
+        });
+
+        async function generateTimeSlots(dateString) {
+            selectedTimeSlot = null;
+            updateConfirmButtonState();
+            
+            const container = document.getElementById('time-slots-container');
+            const grid = document.getElementById('time-slots-grid');
+            const msg = document.getElementById('time-slots-message');
+            
+            grid.innerHTML = '';
+            container.classList.remove('hidden');
+            grid.classList.remove('hidden');
+            msg.classList.add('hidden');
+
+            if (!dateString) {
+                container.classList.add('hidden');
+                return;
+            }
+
+            msg.textContent = "Checking availability...";
+            msg.classList.remove('hidden');
+
+            const dateObj = new Date(dateString);
+            const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+            const dayName = dayNames[dateObj.getDay()];
+
+            let workingHours = globalBizData?.working_hours || {};
+            const defaultHours = {
+                monday: { isOpen: true, openTime: '09:00', closeTime: '18:00' },
+                tuesday: { isOpen: true, openTime: '09:00', closeTime: '18:00' },
+                wednesday: { isOpen: true, openTime: '09:00', closeTime: '18:00' },
+                thursday: { isOpen: true, openTime: '09:00', closeTime: '18:00' },
+                friday: { isOpen: true, openTime: '09:00', closeTime: '18:00' },
+                saturday: { isOpen: true, openTime: '10:00', closeTime: '16:00' },
+                sunday: { isOpen: false }
+            };
+
+            if (Object.keys(workingHours).length === 0) {
+                workingHours = defaultHours;
+            }
+
+            const dayConfig = workingHours[dayName];
+
+            if (!dayConfig || !dayConfig.isOpen) {
+                grid.classList.add('hidden');
+                msg.textContent = "Closed on this date.";
+                msg.classList.remove('hidden');
+                return;
+            }
+
+            let startObj = new Date(`1970-01-01T${dayConfig.openTime}:00`);
+            let endObj = new Date(`1970-01-01T${dayConfig.closeTime}:00`);
+            
+            let slots = [];
+            while (startObj < endObj) {
+                const timeString = startObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+                slots.push(timeString);
+                startObj.setMinutes(startObj.getMinutes() + 60);
+            }
+
+            try {
+                const { data: bookedData, error } = await window.supabaseClient.rpc('get_booked_times', {
+                    p_biz_id: businessId,
+                    p_date: dateString
+                });
+
+                if (error) throw error;
+                
+                const bookedTimes = (bookedData || []).map(row => row.booked_time);
+                slots = slots.filter(slot => !bookedTimes.includes(slot));
+                
+            } catch (err) {
+                console.error("Failed to fetch availability:", err);
+            }
+
+            msg.classList.add('hidden');
+
+            if (slots.length === 0) {
+                grid.classList.add('hidden');
+                msg.textContent = "No available slots on this date.";
+                msg.classList.remove('hidden');
+                return;
+            }
+
+            slots.forEach(slot => {
+                const btn = document.createElement('button');
+                btn.className = 'py-2 px-1 border border-slate-200 rounded-lg text-sm font-bold text-slate-700 hover:border-indigo-600 hover:text-indigo-600 transition-all slot-btn focus:outline-none';
+                btn.textContent = slot;
+                btn.onclick = () => selectSlot(btn, slot);
+                grid.appendChild(btn);
+            });
+        }
+
+        function selectSlot(btnElement, slotTime) {
+            document.querySelectorAll('.slot-btn').forEach(b => {
+                b.classList.remove('bg-indigo-600', 'text-white', 'border-indigo-600');
+                b.classList.add('text-slate-700', 'border-slate-200');
+            });
+            btnElement.classList.remove('text-slate-700', 'border-slate-200');
+            btnElement.classList.add('bg-indigo-600', 'text-white', 'border-indigo-600');
+            selectedTimeSlot = slotTime;
+            updateConfirmButtonState();
+        }
+
+        function updateConfirmButtonState() {
+            const btn = document.getElementById('confirm-booking-btn');
+            if (selectedTimeSlot) {
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+            } else {
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
             }
         }
     </script>

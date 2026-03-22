@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Business Dashboard | BookEase</title>
+    <title>Business Dashboard | L-CONNECT</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
@@ -12,6 +12,7 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -43,7 +44,7 @@
                     class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center shadow-lg shadow-indigo-100">
                     <span class="material-symbols-outlined text-white text-sm">calendar_add_on</span>
                 </div>
-                <span class="text-xl font-bold tracking-tight text-slate-900">BookEase</span>
+                <span class="text-xl font-bold tracking-tight text-slate-900">L-CONNECT</span>
             </div>
 
             <nav class="flex-1 mt-6">
@@ -95,7 +96,7 @@
                             <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Administrator</p>
                         </div>
                         <div class="w-10 h-10 rounded-full bg-slate-200 overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=2574&auto=format&fit=crop"
+                            <img id="header-profile-img" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=2574&auto=format&fit=crop"
                                 class="w-full h-full object-cover">
                         </div>
                     </div>
@@ -117,7 +118,7 @@
                             </div>
                             <div
                                 class="flex bg-white/10 p-2 rounded-2xl items-center gap-4 backdrop-blur-md border border-white/20">
-                                <input type="text" readonly id="share-link-input" value="bookease.me/your-biz"
+                                <input type="text" readonly id="share-link-input" value="l-connect.com/your-biz"
                                     class="bg-transparent border-none text-white font-bold px-4 focus:ring-0 w-48 text-sm">
                                 <button onclick="copyCurrentLink()"
                                     class="bg-white text-indigo-600 px-6 py-2 rounded-xl font-bold text-sm hover:bg-slate-50 transition-all active:scale-95 shadow-sm">
@@ -178,6 +179,17 @@
                             <!-- Injected by JS -->
                         </div>
                     </div>
+
+                    <!-- Analytics Chart -->
+                    <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 md:p-8">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-xl font-bold text-slate-900">Booking Analytics</h3>
+                            <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">Last 7 Days</span>
+                        </div>
+                        <div class="relative h-72 w-full">
+                            <canvas id="analyticsChart"></canvas>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- BOOKINGS TAB -->
@@ -225,6 +237,18 @@
                         <h3 class="text-xl font-bold mb-6">Business Profile</h3>
                         <div class="space-y-6">
                             <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-2">Profile Picture</label>
+                                <div class="flex items-center gap-4">
+                                    <div class="w-16 h-16 rounded-full bg-slate-200 overflow-hidden border-2 border-slate-100 flex-shrink-0">
+                                        <img id="settings-profile-preview" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=2574&auto=format&fit=crop" class="w-full h-full object-cover">
+                                    </div>
+                                    <div class="flex-1">
+                                        <input type="file" id="edit-profile-pic" accept="image/*" class="text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer">
+                                        <p class="text-xs text-slate-400 mt-1">Max file size: 2MB. Recommended: Square image.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
                                 <label class="block text-sm font-bold text-slate-700 mb-2">Business Name</label>
                                 <input type="text" id="edit-biz-name"
                                     class="w-full px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl">
@@ -239,12 +263,28 @@
                                 <input type="email" id="edit-biz-email"
                                     class="w-full px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl">
                             </div>
-                            <button onclick="saveProfile()"
-                                class="w-full py-4 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition-all">
-                                Save Profile Changes
-                            </button>
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-2">Store Theme</label>
+                                <select id="edit-biz-theme" class="w-full px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl appearance-none cursor-pointer">
+                                    <option value="classic">Classic Minimalist</option>
+                                    <option value="modern">Modern Dark</option>
+                                    <option value="playful">Playful Elegant</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
+
+                    <div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm">
+                        <h3 class="text-xl font-bold mb-6">Working Hours</h3>
+                        <div id="working-hours-container" class="space-y-4">
+                            <!-- Injected by JS -->
+                        </div>
+                    </div>
+
+                    <button onclick="saveProfile()"
+                        class="w-full py-4 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition-all shadow-lg active:scale-95">
+                        Save Profile Changes
+                    </button>
                 </div>
 
             </div>
@@ -276,10 +316,37 @@
         let services = [];
         let bookings = [];
         let userId = null;
+        let selectedProfilePicBase64 = null;
+        let analyticsChartInstance = null;
+
+        function showToast(message, type = 'success') {
+            let container = document.getElementById('toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'toast-container';
+                container.className = 'fixed bottom-6 right-6 z-[100] flex flex-col gap-3 pointer-events-none';
+                document.body.appendChild(container);
+            }
+            const toast = document.createElement('div');
+            const bgClass = type === 'success' ? 'bg-slate-800' : (type === 'error' ? 'bg-red-500' : 'bg-indigo-600');
+            const icon = type === 'success' ? 'check_circle' : (type === 'error' ? 'error' : 'info');
+            toast.className = `flex items-center gap-3 px-6 py-4 rounded-xl shadow-2xl text-white transform transition-all duration-300 translate-y-10 opacity-0 pointer-events-auto ${bgClass}`;
+            toast.innerHTML = `<span class="material-symbols-outlined">${icon}</span><span class="font-bold text-sm">${message}</span>`;
+            container.appendChild(toast);
+            
+            requestAnimationFrame(() => {
+                toast.classList.remove('translate-y-10', 'opacity-0');
+            });
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
 
         window.onload = async () => {
             if (!window.supabaseClient) {
-                alert("Supabase not initialized. Check supabase-config.js");
+                showToast("Supabase not initialized. Check supabase-config.js", "error");
                 return;
             }
 
@@ -344,6 +411,9 @@
             document.getElementById('biz-id-tag').textContent = `#${bizData.slug || 'ID'}`;
             document.getElementById('owner-name-display').textContent = bizData.name;
 
+            const currentPic = bizData.profile_picture || 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=2574&auto=format&fit=crop';
+            document.getElementById('header-profile-img').src = currentPic;
+
             // Share link
             const shareLink = window.location.origin + window.location.pathname.replace('dashboard.html', 'booking.html') + '?id=' + bizData.slug;
             document.getElementById('share-link-input').value = shareLink;
@@ -363,6 +433,7 @@
             renderBookings();
             renderServices();
             fillSettings();
+            renderAnalyticsChart();
         }
 
         function switchTab(tabId) {
@@ -401,7 +472,10 @@
                         </div>
                     </td>
                     <td class="px-8 py-5 text-sm font-medium text-slate-600">${booking.service_name}</td>
-                    <td class="px-8 py-5 text-sm text-slate-500">${booking.booking_date}</td>
+                    <td class="px-8 py-5 text-sm text-slate-500">
+                        <div class="font-medium text-slate-900">${booking.booking_date}</div>
+                        ${booking.booking_time ? `<div class="text-xs text-slate-400">${booking.booking_time}</div>` : ''}
+                    </td>
                     <td class="px-8 py-5 text-sm font-bold text-slate-900">${booking.service_price}</td>
                     <td class="px-8 py-5">
                         <span class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${getStatusClass(booking.status)}">
@@ -431,7 +505,7 @@
                         <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 font-bold">${b.client_name.charAt(0)}</div>
                         <div>
                             <p class="font-bold text-sm">${b.client_name}</p>
-                            <p class="text-xs text-slate-400">${b.service_name} • ${b.booking_date}</p>
+                            <p class="text-xs text-slate-400">${b.service_name} • ${b.booking_date}${b.booking_time ? ' at ' + b.booking_time : ''}</p>
                         </div>
                     </div>
                     <span class="text-xs font-bold text-indigo-600">${b.service_price}</span>
@@ -446,6 +520,91 @@
                 case 'rejected': return 'bg-red-100 text-red-700';
                 default: return 'bg-orange-100 text-orange-700';
             }
+        }
+
+        function renderAnalyticsChart() {
+            const ctx = document.getElementById('analyticsChart');
+            if (!ctx) return;
+
+            // Generate last 7 days array
+            const dates = [];
+            const counts = [];
+            for (let i = 6; i >= 0; i--) {
+                const d = new Date();
+                d.setDate(d.getDate() - i);
+                const dateString = d.toISOString().split('T')[0];
+                dates.push(dateString);
+                
+                // Count bookings for this date (excluding rejected)
+                const dayCount = bookings.filter(b => b.booking_date === dateString && b.status !== 'rejected').length;
+                counts.push(dayCount);
+            }
+
+            // Destroy previous instance to avoid visual overlap bugs
+            if (analyticsChartInstance) {
+                analyticsChartInstance.destroy();
+            }
+
+            analyticsChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [{
+                        label: 'Bookings',
+                        data: counts,
+                        borderColor: '#4f46e5',
+                        backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#ffffff',
+                        pointBorderColor: '#4f46e5',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#1e293b',
+                            padding: 12,
+                            titleFont: { size: 13, family: 'Inter' },
+                            bodyFont: { size: 14, weight: 'bold', family: 'Inter' },
+                            displayColors: false,
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.y + ' bookings';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { precision: 0, font: { family: 'Inter' }, color: '#94a3b8' },
+                            grid: { color: '#f1f5f9', drawBorder: false }
+                        },
+                        x: {
+                            ticks: { font: { family: 'Inter' }, color: '#94a3b8',
+                                callback: function(val, index) {
+                                    // Shorten date format for X axis
+                                    const d = new Date(dates[index]);
+                                    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                                }
+                            },
+                            grid: { display: false, drawBorder: false }
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index',
+                    },
+                }
+            });
         }
 
         function renderServices() {
@@ -472,10 +631,59 @@
             });
         }
 
+        const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+
         function fillSettings() {
             document.getElementById('edit-biz-name').value = bizData.name || '';
             document.getElementById('edit-biz-desc').value = bizData.description || '';
             document.getElementById('edit-biz-email').value = bizData.email || '';
+            document.getElementById('edit-biz-theme').value = bizData.theme_id || 'classic';
+
+            const currentPic = bizData.profile_picture || 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=2574&auto=format&fit=crop';
+            document.getElementById('settings-profile-preview').src = currentPic;
+            selectedProfilePicBase64 = bizData.profile_picture || null;
+
+            renderWorkingHoursForm();
+        }
+
+        function renderWorkingHoursForm() {
+            const container = document.getElementById('working-hours-container');
+            container.innerHTML = '';
+            
+            const savedHours = bizData.working_hours || {};
+            
+            daysOfWeek.forEach(day => {
+                const dayData = savedHours[day] || { 
+                    isOpen: (day !== 'sunday'), 
+                    openTime: (day === 'saturday' ? '10:00' : '09:00'), 
+                    closeTime: (day === 'saturday' ? '16:00' : '18:00') 
+                };
+                
+                const row = document.createElement('div');
+                row.className = 'flex items-center justify-between p-4 bg-slate-50 border border-slate-200 rounded-xl';
+                row.innerHTML = `
+                    <div class="flex items-center gap-4 w-1/3">
+                        <input type="checkbox" id="open-${day}" ${dayData.isOpen ? 'checked' : ''} onchange="toggleDay('${day}')" class="w-5 h-5 text-indigo-600 rounded">
+                        <label class="font-bold text-slate-700 capitalize text-sm md:text-base">${day}</label>
+                    </div>
+                    <div class="flex items-center gap-2 w-2/3 justify-end ${!dayData.isOpen ? 'opacity-50 pointer-events-none' : ''}" id="time-group-${day}">
+                        <input type="time" id="open-time-${day}" value="${dayData.openTime}" class="px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white focus:ring-2 focus:ring-indigo-500/20">
+                        <span class="text-slate-400 font-bold">-</span>
+                        <input type="time" id="close-time-${day}" value="${dayData.closeTime}" class="px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white focus:ring-2 focus:ring-indigo-500/20">
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        function toggleDay(day) {
+            const checkbox = document.getElementById(`open-${day}`);
+            const timeGroup = document.getElementById(`time-group-${day}`);
+            if(checkbox.checked) {
+                timeGroup.classList.remove('opacity-50', 'pointer-events-none');
+            } else {
+                timeGroup.classList.add('opacity-50', 'pointer-events-none');
+            }
         }
 
         // Actions
@@ -488,8 +696,9 @@
 
                 if (error) throw error;
                 await loadAllData();
+                showToast("Booking updated", "success");
             } catch (err) {
-                alert("Error updating booking: " + err.message);
+                showToast("Error updating booking: " + err.message, "error");
             }
         }
 
@@ -503,17 +712,30 @@
 
                     if (error) throw error;
                     await loadAllData();
+                    showToast("Booking deleted", "success");
                 } catch (err) {
-                    alert("Error deleting booking: " + err.message);
+                    showToast("Error deleting booking: " + err.message, "error");
                 }
             }
         }
 
         async function saveProfile() {
+            const workingHours = {};
+            daysOfWeek.forEach(day => {
+                workingHours[day] = {
+                    isOpen: document.getElementById(`open-${day}`).checked,
+                    openTime: document.getElementById(`open-time-${day}`).value,
+                    closeTime: document.getElementById(`close-time-${day}`).value
+                };
+            });
+
             const updatedBiz = {
                 name: document.getElementById('edit-biz-name').value,
                 description: document.getElementById('edit-biz-desc').value,
-                email: document.getElementById('edit-biz-email').value
+                email: document.getElementById('edit-biz-email').value,
+                theme_id: document.getElementById('edit-biz-theme').value,
+                profile_picture: selectedProfilePicBase64,
+                working_hours: workingHours
             };
 
             try {
@@ -525,9 +747,9 @@
                 if (error) throw error;
                 
                 await loadAllData();
-                alert('Profile updated successfully!');
+                showToast('Profile updated successfully!', 'success');
             } catch (err) {
-                alert("Error saving profile: " + err.message);
+                showToast("Error saving profile: " + err.message, "error");
             }
         }
 
@@ -554,8 +776,9 @@
                     closeServiceModal();
                     document.getElementById('new-service-name').value = '';
                     document.getElementById('new-service-price').value = '';
+                    showToast("Service added", "success");
                 } catch (err) {
-                    alert("Error adding service: " + err.message);
+                    showToast("Error adding service: " + err.message, "error");
                 }
             }
         }
@@ -570,8 +793,9 @@
 
                     if (error) throw error;
                     await loadAllData();
+                    showToast("Service deleted", "success");
                 } catch (err) {
-                    alert("Error deleting service: " + err.message);
+                    showToast("Error deleting service: " + err.message, "error");
                 }
             }
         }
@@ -580,7 +804,7 @@
             const input = document.getElementById('share-link-input');
             input.select();
             document.execCommand('copy');
-            alert('Link copied to clipboard!');
+            showToast('Link copied to clipboard!', 'success');
         }
 
         async function logout() {
@@ -590,6 +814,24 @@
                 window.location.href = 'index.html';
             }
         }
+
+        document.getElementById('edit-profile-pic').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            if (file.size > 2 * 1024 * 1024) {
+                showToast('File is too large. Max size is 2MB.', 'error');
+                this.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                selectedProfilePicBase64 = event.target.result;
+                document.getElementById('settings-profile-preview').src = selectedProfilePicBase64;
+            };
+            reader.readAsDataURL(file);
+        });
     </script>
 </body>
 

@@ -5,6 +5,9 @@ CREATE TABLE businesses (
   description TEXT,
   email TEXT NOT NULL,
   slug TEXT UNIQUE NOT NULL,
+  theme_id TEXT DEFAULT 'classic',
+  profile_picture TEXT,
+  working_hours JSONB DEFAULT '{}'::jsonb,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
@@ -26,6 +29,7 @@ CREATE TABLE bookings (
   service_name TEXT NOT NULL,
   service_price TEXT NOT NULL,
   booking_date DATE NOT NULL,
+  booking_time TEXT,
   status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected')),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
