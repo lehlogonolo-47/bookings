@@ -85,13 +85,16 @@
             <header
                 class="bg-white border-b border-slate-200 h-20 flex items-center justify-between px-6 md:px-12 sticky top-0 z-10">
                 <div class="flex items-center gap-4">
+                    <button onclick="toggleMobileMenu()" class="md:hidden w-10 h-10 flex items-center justify-center bg-indigo-50 text-indigo-600 rounded-xl transition-all active:scale-95">
+                        <span class="material-symbols-outlined">menu</span>
+                    </button>
                     <h1 class="text-xl font-bold text-slate-800" id="header-title">Overview</h1>
                     <span class="hidden md:block px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-xs font-bold"
                         id="biz-id-tag">#ID</span>
                 </div>
                 <div class="flex items-center gap-6">
                     <div class="flex items-center gap-3 border-l pl-6 border-slate-200">
-                        <div class="text-right">
+                        <div class="text-right hidden sm:block">
                             <p class="text-sm font-bold text-slate-900" id="owner-name-display">Business Owner</p>
                             <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Administrator</p>
                         </div>
@@ -264,6 +267,11 @@
                                     class="w-full px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl">
                             </div>
                             <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-2">Contact Phone</label>
+                                <input type="tel" id="edit-biz-phone" placeholder="e.g. +27 82 123 4567"
+                                    class="w-full px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl">
+                            </div>
+                            <div>
                                 <label class="block text-sm font-bold text-slate-700 mb-2">Store Theme</label>
                                 <select id="edit-biz-theme" class="w-full px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl appearance-none cursor-pointer">
                                     <option value="classic">Classic Minimalist</option>
@@ -289,6 +297,56 @@
 
             </div>
         </main>
+    <!-- MOBILE MENU OVERLAY -->
+    <div id="mobile-menu" onclick="if(event.target === this) toggleMobileMenu()" class="fixed inset-0 z-[100] bg-slate-900/40 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300">
+        <div id="mobile-menu-content" class="bg-white w-3/4 max-w-xs h-full flex flex-col shadow-2xl transition-transform duration-300 -translate-x-full">
+            <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
+                        <span class="material-symbols-outlined text-white text-sm">calendar_add_on</span>
+                    </div>
+                    <span class="text-lg font-bold">L-CONNECT</span>
+                </div>
+                <button onclick="toggleMobileMenu()" class="p-2 text-slate-400">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            
+            <nav class="flex-1 py-6">
+                <button onclick="switchTab('overview')" class="mobile-nav-link active w-full flex items-center gap-4 px-8 py-5 border-l-4 border-transparent text-slate-600 font-medium transition-all" id="mob-nav-overview">
+                    <span class="material-symbols-outlined">dashboard</span>
+                    Overview
+                </button>
+                <button onclick="switchTab('bookings')" class="mobile-nav-link w-full flex items-center gap-4 px-8 py-5 border-l-4 border-transparent text-slate-600 font-medium transition-all" id="mob-nav-bookings">
+                    <span class="material-symbols-outlined">calendar_month</span>
+                    Bookings
+                </button>
+                <button onclick="switchTab('services')" class="mobile-nav-link w-full flex items-center gap-4 px-8 py-5 border-l-4 border-transparent text-slate-600 font-medium transition-all" id="mob-nav-services">
+                    <span class="material-symbols-outlined">medical_services</span>
+                    Services
+                </button>
+                <button onclick="switchTab('settings')" class="mobile-nav-link w-full flex items-center gap-4 px-8 py-5 border-l-4 border-transparent text-slate-600 font-medium transition-all" id="mob-nav-settings">
+                    <span class="material-symbols-outlined">settings</span>
+                    Settings
+                </button>
+            </nav>
+
+            <div class="p-8 border-t border-slate-100">
+                <button onclick="logout()" class="flex items-center gap-3 text-slate-400 font-bold text-sm">
+                    <span class="material-symbols-outlined text-sm">logout</span>
+                    Sign Out
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .mobile-nav-link.active {
+            color: #4f46e5;
+            background: rgba(79, 70, 229, 0.05);
+            border-left-color: #4f46e5;
+        }
+    </style>
     </div>
 
     <!-- NEW SERVICE MODAL -->
@@ -439,11 +497,46 @@
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+            document.querySelectorAll('.mobile-nav-link').forEach(l => l.classList.remove('active'));
 
             document.getElementById(`tab-${tabId}`).classList.add('active');
-            document.getElementById(`nav-${tabId}`).classList.add('active');
+            
+            // Highlight sidebar link
+            const navBtn = document.getElementById(`nav-${tabId}`);
+            if (navBtn) navBtn.classList.add('active');
+            
+            // Highlight mobile link
+            const mobNavBtn = document.getElementById(`mob-nav-${tabId}`);
+            if (mobNavBtn) mobNavBtn.classList.add('active');
 
             document.getElementById('header-title').textContent = tabId.charAt(0).toUpperCase() + tabId.slice(1);
+            
+            // Close mobile menu after selection
+            const menuOverlay = document.getElementById('mobile-menu');
+            if (!menuOverlay.classList.contains('hidden')) {
+                toggleMobileMenu();
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menuOverlay = document.getElementById('mobile-menu');
+            const menuContent = document.getElementById('mobile-menu-content');
+            
+            if (menuOverlay.classList.contains('hidden')) {
+                // Open
+                menuOverlay.classList.remove('hidden');
+                setTimeout(() => {
+                    menuOverlay.classList.remove('opacity-0');
+                    menuContent.classList.remove('-translate-x-full');
+                }, 10);
+            } else {
+                // Close
+                menuOverlay.classList.add('opacity-0');
+                menuContent.classList.add('-translate-x-full');
+                setTimeout(() => {
+                    menuOverlay.classList.add('hidden');
+                }, 300);
+            }
         }
 
         function renderBookings() {
@@ -637,6 +730,7 @@
             document.getElementById('edit-biz-name').value = bizData.name || '';
             document.getElementById('edit-biz-desc').value = bizData.description || '';
             document.getElementById('edit-biz-email').value = bizData.email || '';
+            document.getElementById('edit-biz-phone').value = bizData.phone_number || '';
             document.getElementById('edit-biz-theme').value = bizData.theme_id || 'classic';
 
             const currentPic = bizData.profile_picture || 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=2574&auto=format&fit=crop';
@@ -733,6 +827,7 @@
                 name: document.getElementById('edit-biz-name').value,
                 description: document.getElementById('edit-biz-desc').value,
                 email: document.getElementById('edit-biz-email').value,
+                phone_number: document.getElementById('edit-biz-phone').value,
                 theme_id: document.getElementById('edit-biz-theme').value,
                 profile_picture: selectedProfilePicBase64,
                 working_hours: workingHours
