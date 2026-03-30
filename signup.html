@@ -94,6 +94,11 @@
                             class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 transition-all text-lg">
                     </div>
                     <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Contact Phone</label>
+                        <input type="tel" id="biz-phone" placeholder="e.g. +27 82 123 4567"
+                            class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 transition-all text-lg">
+                    </div>
+                    <div>
                         <label class="block text-sm font-bold text-slate-700 mb-2">Create Password</label>
                         <input type="password" id="biz-pass" placeholder="••••••••"
                             class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 transition-all text-lg">
@@ -240,10 +245,11 @@
             if (step > 1 && currentStep === 1) {
                 const name = document.getElementById('biz-name').value;
                 const email = document.getElementById('biz-email').value;
+                const phone = document.getElementById('biz-phone').value;
                 const pass = document.getElementById('biz-pass').value;
 
-                if (!name || !email || !pass) {
-                    showToast('Please fill in your business name, email, and password.', 'error');
+                if (!name || !email || !pass || !phone) {
+                    showToast('Please fill in your business name, email, phone, and password.', 'error');
                     return;
                 }
             }
@@ -279,6 +285,7 @@
             const name = document.getElementById('biz-name').value;
             const desc = document.getElementById('biz-desc').value;
             const email = document.getElementById('biz-email').value;
+            const phone = document.getElementById('biz-phone').value;
             const pass = document.getElementById('biz-pass').value;
 
             const services = [];
@@ -307,7 +314,7 @@
                     const hasFetch = e && e.message && e.message.includes('fetch');
                     if (isLocalFile || hasFetch) {
                         const useLocal = confirm("We are having trouble connecting to the database.\n\nThis usually happens if you are opening the file directly (file://) or have network issues.\n\nWould you like to continue using OFFLINE MODE (LocalStorage) for now?");
-                        if (useLocal) return useOfflineModeFallback(name, desc, email, pass, services);
+                        if (useLocal) return useOfflineModeFallback(name, desc, email, phone, pass, services);
                     }
                 }
 
@@ -332,6 +339,7 @@
                         name: name,
                         description: desc,
                         email: email,
+                        phone_number: phone,
                         slug: name.toLowerCase().replace(/[^a-z0-9]/g, '-') + '-' + Math.floor(Math.random() * 1000)
                     }]);
 
@@ -368,18 +376,19 @@
                 const hasFetchError = err && err.message && err.message.includes('fetch');
                 if (hasFetchError || isLocalFile) {
                     const fallback = confirm("Connection Error: " + (err.message || 'Unknown error') + "\n\nWould you like to use OFFLINE MODE instead? (Data will only be saved locally on this browser)");
-                    if (fallback) return useOfflineModeFallback(name, desc, email, pass, services);
+                    if (fallback) return useOfflineModeFallback(name, desc, email, phone, pass, services);
                 }
                 showToast("Error setting up your profile: " + (err.message || JSON.stringify(err)), "error");
                 return false;
             }
         }
 
-        async function useOfflineModeFallback(name, desc, email, pass, services) {
+        async function useOfflineModeFallback(name, desc, email, phone, pass, services) {
             const businessData = {
                 name,
                 desc,
                 email,
+                phone_number: phone,
                 password: pass,
                 services,
                 id: name.toLowerCase().replace(/[^a-z0-9]/g, '-') + '-' + Math.floor(Math.random() * 1000),

@@ -4,6 +4,7 @@ CREATE TABLE businesses (
   name TEXT NOT NULL,
   description TEXT,
   email TEXT NOT NULL,
+  phone_number TEXT,
   slug TEXT UNIQUE NOT NULL,
   theme_id TEXT DEFAULT 'classic',
   profile_picture TEXT,

@@ -54,6 +54,10 @@
                         <span id="theme-pill-icon" class="material-symbols-outlined text-sm text-green-500">check_circle</span>
                         <span id="biz-email-text">contact@business.com</span>
                     </div>
+                    <a id="biz-phone-pill" href="#" class="hidden items-center gap-2 text-white bg-indigo-600 px-4 py-1.5 rounded-lg text-sm font-bold hover:bg-indigo-700 transition-all active:scale-95">
+                        <span class="material-symbols-outlined text-sm">call</span>
+                        <span id="biz-phone-text"></span>
+                    </a>
                 </div>
             </div>
         </div>
@@ -315,6 +319,18 @@
             document.title = data.name + ' - Booking Page';
             document.getElementById('biz-desc-text').textContent = data.description;
             document.getElementById('biz-email-text').textContent = data.email;
+
+            // Phone number pill
+            const phonePill = document.getElementById('biz-phone-pill');
+            if (data.phone_number) {
+                document.getElementById('biz-phone-text').textContent = data.phone_number;
+                phonePill.href = `tel:${data.phone_number}`;
+                phonePill.classList.remove('hidden');
+                phonePill.classList.add('flex');
+            } else {
+                phonePill.classList.add('hidden');
+                phonePill.classList.remove('flex');
+            }
 
             const logoContainer = document.getElementById('biz-logo');
             if (data.profile_picture) {
