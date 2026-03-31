@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Business Booking Page</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Quicksand:wght@400;500;600;700&family=Playfair+Display:wght@700;800;900&family=Outfit:wght@400;500;600;700;800&family=Syne:wght@700;800&family=JetBrains+Mono:wght@500;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
@@ -24,10 +24,10 @@
     </style>
 </head>
 
-<body class="bg-slate-50 text-slate-900">
+<body class="bg-slate-100 text-slate-900">
 
     <!-- Header Section -->
-    <div id="theme-header" class="bg-white border-b border-slate-200 pt-16 pb-12 px-4 shadow-sm transition-colors duration-500">
+    <div id="theme-header" class="bg-slate-50 border-b border-slate-200 pt-16 pb-12 px-4 shadow-sm transition-colors duration-500">
         <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-8">
             <div id="biz-logo"
                 class="w-32 h-32 rounded-3xl bg-slate-900 flex items-center justify-center text-white shadow-xl shadow-slate-200 transition-colors duration-500">
@@ -78,7 +78,14 @@
                 <div class="animate-pulse flex flex-col gap-4">
                     <div class="h-24 bg-slate-200 rounded-2xl"></div>
                     <div class="h-24 bg-slate-200 rounded-2xl"></div>
-                </div>
+            </div>
+        </div>
+
+        <!-- Portfolio Section (Hidden if empty) -->
+        <div id="portfolio-section" class="hidden space-y-8 lg:col-span-2">
+            <h2 id="theme-portfolio-title" class="text-2xl font-bold text-slate-900 transition-colors duration-500">Our Work</h2>
+            <div id="portfolio-grid" class="grid grid-cols-2 lg:grid-cols-3 gap-4 pb-20">
+                <!-- Images will be injected here -->
             </div>
         </div>
 
@@ -171,8 +178,8 @@
 
         const themes = {
             classic: {
-                body: "bg-slate-50 text-slate-900 font-inter",
-                header: "bg-white border-b border-slate-200 pt-16 pb-12 px-4 shadow-sm transition-colors duration-500",
+                body: "bg-slate-100 text-slate-900 font-inter",
+                header: "bg-slate-50 border-b border-slate-200 pt-16 pb-12 px-4 shadow-sm transition-colors duration-500",
                 logo: "w-32 h-32 rounded-3xl bg-slate-900 flex items-center justify-center text-white shadow-xl shadow-slate-200 transition-colors duration-500",
                 badge: "text-xs px-2 py-1 bg-slate-100 text-slate-600 rounded-full font-bold uppercase tracking-wider transition-colors duration-500",
                 title: "text-4xl font-extrabold text-slate-900 mb-3 tracking-tight transition-colors duration-500",
@@ -180,6 +187,7 @@
                 pill1: "flex items-center gap-2 text-slate-500 bg-slate-100 px-3 py-1.5 rounded-lg text-sm transition-colors duration-500",
                 pill2: "flex items-center gap-2 text-slate-500 bg-slate-100 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-500",
                 servicesTitle: "text-2xl font-bold text-slate-900 transition-colors duration-500",
+                portfolioTitle: "text-2xl font-bold text-slate-900 pt-8 border-t border-slate-200 transition-colors duration-500",
                 sidebar: "bg-slate-900 rounded-3xl p-8 text-white shadow-xl shadow-slate-200 sticky top-8 transition-colors duration-500",
                 sidebarDesc: "text-slate-300 text-sm mb-6 leading-relaxed transition-colors duration-500",
                 sidebarLabelClass: "text-slate-400",
@@ -203,6 +211,7 @@
                 pill1: "flex items-center gap-2 text-slate-400 bg-slate-800 px-3 py-1.5 rounded-md text-sm transition-colors duration-500",
                 pill2: "flex items-center gap-2 text-slate-400 bg-slate-800 px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-500",
                 servicesTitle: "text-2xl font-bold text-white transition-colors duration-500",
+                portfolioTitle: "text-2xl font-bold text-white pt-8 border-t border-slate-700 transition-colors duration-500",
                 sidebar: "bg-slate-800 border border-slate-700 rounded-xl p-8 text-white shadow-2xl sticky top-8 transition-colors duration-500",
                 sidebarDesc: "text-slate-400 text-sm mb-6 leading-relaxed transition-colors duration-500",
                 sidebarLabelClass: "text-slate-400",
@@ -226,6 +235,7 @@
                 pill1: "flex items-center gap-2 text-slate-600 bg-white shadow-sm border border-rose-50 px-4 py-2 rounded-full text-sm font-bold transition-colors duration-500",
                 pill2: "flex items-center gap-2 text-slate-600 bg-white shadow-sm border border-rose-50 px-4 py-2 rounded-full text-sm font-bold transition-colors duration-500",
                 servicesTitle: "text-2xl font-black text-rose-600 transition-colors duration-500",
+                portfolioTitle: "text-2xl font-black text-rose-600 pt-8 border-t-4 border-rose-50 transition-colors duration-500",
                 sidebar: "bg-white border-4 border-rose-100 rounded-[2rem] p-8 text-slate-800 shadow-xl shadow-rose-100/50 sticky top-8 transition-colors duration-500",
                 sidebarDesc: "text-slate-500 text-sm mb-6 leading-relaxed font-medium transition-colors duration-500",
                 sidebarLabelClass: "text-slate-400 font-bold",
@@ -238,6 +248,102 @@
                 cardTitleClass: "font-black text-slate-800 text-lg group-hover:text-rose-600 transition-colors",
                 cardPriceClass: "text-sm font-extrabold text-pink-500",
                 cardChevronBgClass: "w-10 h-10 rounded-full bg-rose-50 group-hover:bg-rose-500 group-hover:text-white flex items-center justify-center transition-all text-rose-400"
+            },
+            luxury: {
+                body: "bg-[#0F172A] text-slate-200 !font-['Playfair_Display']",
+                header: "bg-[#0F172A] border-b border-amber-900/30 pt-20 pb-16 px-4 shadow-2xl transition-colors duration-500",
+                logo: "w-32 h-32 rounded-none bg-transparent border-4 border-amber-500 flex items-center justify-center text-amber-500 shadow-xl shadow-amber-900/40 transition-colors duration-500",
+                badge: "text-[10px] px-2 py-1 bg-amber-500/10 text-amber-500 border border-amber-500/30 font-black uppercase tracking-[0.2em] transition-colors duration-500",
+                title: "text-5xl font-black text-white mb-3 tracking-tight transition-colors duration-500 leading-tight",
+                desc: "text-lg text-slate-400 leading-relaxed max-w-xl italic transition-colors duration-500",
+                pill1: "flex items-center gap-2 text-amber-500/80 bg-slate-800/50 border border-amber-900/20 px-4 py-2 rounded-none text-xs font-black uppercase tracking-widest transition-colors duration-500",
+                pill2: "flex items-center gap-2 text-amber-500/80 bg-slate-800/50 border border-amber-900/20 px-4 py-2 rounded-none text-xs font-black uppercase tracking-widest transition-colors duration-500",
+                servicesTitle: "text-3xl font-black text-amber-500 uppercase tracking-widest transition-colors duration-500",
+                portfolioTitle: "text-3xl font-black text-amber-500 uppercase tracking-widest pt-12 border-t border-amber-900/20 transition-colors duration-500",
+                sidebar: "bg-[#1E293B] border border-amber-500/20 p-8 text-white shadow-2xl sticky top-8 transition-colors duration-500",
+                sidebarDesc: "text-slate-400 text-sm mb-8 leading-relaxed font-inter transition-colors duration-500",
+                sidebarLabelClass: "text-amber-500/60 font-black uppercase tracking-widest text-[10px] mb-1 block",
+                sidebarClosedClass: "font-black text-amber-900 uppercase",
+                sidebarBorderClass: "border-amber-900/20",
+                sidebarBtn: "w-full bg-amber-500 text-slate-900 py-5 rounded-none font-black text-lg shadow-lg hover:bg-amber-400 transition-all active:scale-95 uppercase tracking-widest",
+                cardClass: "booking-card bg-slate-800/50 p-8 border border-amber-900/20 shadow-md flex items-center justify-between group cursor-pointer hover:border-amber-500 transition-all",
+                cardIconBgClass: "w-16 h-16 bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-500",
+                cardIconClass: "material-symbols-outlined text-3xl",
+                cardTitleClass: "font-black text-white text-xl group-hover:text-amber-500 transition-colors uppercase tracking-tight",
+                cardPriceClass: "text-sm font-bold text-amber-500/60 font-inter",
+                cardChevronBgClass: "w-12 h-12 border border-amber-900/40 group-hover:bg-amber-500 group-hover:text-slate-900 flex items-center justify-center transition-all text-amber-500"
+            },
+            nature: {
+                body: "bg-[#FDFCF8] text-[#1A2E1A] !font-['Outfit']",
+                header: "bg-[#FDFCF8] border-b border-[#E8ECE0] pt-16 pb-12 px-4 transition-colors duration-500",
+                logo: "w-32 h-32 rounded-[2.5rem] bg-[#2D4F2D] flex items-center justify-center text-white shadow-xl shadow-[#1A2E1A1A] transition-colors duration-500",
+                badge: "text-xs px-3 py-1 bg-[#F0F4E8] text-[#2D4F2D] rounded-full font-bold uppercase tracking-wider transition-colors duration-500",
+                title: "text-4xl font-extrabold text-[#1A2E1A] mb-3 tracking-tight transition-colors duration-500",
+                desc: "text-lg text-[#445A44] leading-relaxed max-w-2xl transition-colors duration-500",
+                pill1: "flex items-center gap-2 text-[#2D4F2D] bg-[#F0F4E8] px-4 py-2 rounded-full text-sm font-semibold transition-colors duration-500",
+                pill2: "flex items-center gap-2 text-[#2D4F2D] bg-[#F0F4E8] px-4 py-2 rounded-full text-sm font-semibold transition-colors duration-500",
+                servicesTitle: "text-2xl font-black text-[#2D4F2D] transition-colors duration-500",
+                portfolioTitle: "text-2xl font-black text-[#2D4F2D] pt-10 border-t border-[#E8ECE0] transition-colors duration-500",
+                sidebar: "bg-[#2D4F2D] rounded-[2.5rem] p-10 text-white shadow-2xl shadow-[#1A2E1A33] sticky top-8 transition-colors duration-500",
+                sidebarDesc: "text-[#C8D1C8] text-sm mb-8 leading-relaxed transition-colors duration-500",
+                sidebarLabelClass: "text-[#A8BBA8] font-bold text-xs uppercase mb-1 block",
+                sidebarClosedClass: "font-bold text-[#445A44] opacity-50",
+                sidebarBorderClass: "border-[#3D5F3D]",
+                sidebarBtn: "w-full bg-[#D4E299] text-[#1A2E1A] py-5 rounded-full font-black text-lg shadow-lg hover:bg-[#E8F2BB] transition-all active:scale-95",
+                cardClass: "booking-card bg-white p-7 rounded-[2rem] border border-[#E8ECE0] shadow-sm flex items-center justify-between group cursor-pointer hover:border-[#2D4F2D] hover:shadow-md transition-all",
+                cardIconBgClass: "w-16 h-16 bg-[#F0F4E8] rounded-2xl flex items-center justify-center text-[#2D4F2D]",
+                cardIconClass: "material-symbols-outlined text-3xl font-medium",
+                cardTitleClass: "font-bold text-[#1A2E1A] text-xl group-hover:text-[#2D4F2D] transition-colors",
+                cardPriceClass: "text-base font-bold text-[#448844]",
+                cardChevronBgClass: "w-12 h-12 rounded-full bg-[#F0F4E8] group-hover:bg-[#2D4F2D] group-hover:text-white flex items-center justify-center transition-all text-[#2D4F2D]"
+            },
+            cyber: {
+                body: "bg-[#050505] text-[#00FFCC] !font-['JetBrains_Mono']",
+                header: "bg-[#0A0A0A] border-b-2 border-[#00FFCC]/20 pt-16 pb-12 px-4 shadow-[0_0_50px_rgba(0,255,204,0.05)] transition-colors duration-500",
+                logo: "w-32 h-32 rounded-none border-2 border-[#00FFCC] bg-black flex items-center justify-center text-[#00FFCC] shadow-[0_0_30px_rgba(0,255,204,0.3)] transition-colors duration-500 animate-pulse",
+                badge: "text-[10px] px-2 py-1 border border-[#00FFCC]/50 text-[#00FFCC] font-bold uppercase tracking-widest transition-colors duration-500",
+                title: "text-4xl font-black text-white mb-3 tracking-tighter transition-colors duration-500 uppercase",
+                desc: "text-base text-[#00AA88] leading-relaxed max-w-2xl transition-colors duration-500 font-medium",
+                pill1: "flex items-center gap-2 text-[#00FFCC] bg-[#00FFCC]/5 border border-[#00FFCC]/20 px-3 py-1.5 rounded-none text-xs transition-colors duration-500",
+                pill2: "flex items-center gap-2 text-[#00FFCC] bg-[#00FFCC]/5 border border-[#00FFCC]/20 px-3 py-1.5 rounded-none text-xs font-bold transition-colors duration-500",
+                servicesTitle: "text-2xl font-black text-[#00FFCC] border-l-4 border-[#00FFCC] pl-4 transition-colors duration-500 uppercase",
+                portfolioTitle: "text-2xl font-black text-[#00FFCC] border-l-4 border-[#00FFCC] pl-4 pt-4 mt-8 border-t-2 border-[#00FFCC]/20 transition-colors duration-500 uppercase",
+                sidebar: "bg-black border-2 border-[#00FFCC] p-8 text-[#00FFCC] shadow-[0_0_40px_rgba(0,255,204,0.1)] sticky top-8 transition-colors duration-500",
+                sidebarDesc: "text-[#00AA88] text-xs mb-8 leading-relaxed transition-colors duration-500",
+                sidebarLabelClass: "text-[#00FFCC]/60 text-[10px] uppercase font-bold mb-1 block tracking-wider",
+                sidebarClosedClass: "font-black text-[#003322]",
+                sidebarBorderClass: "border-[#00FFCC]/20",
+                sidebarBtn: "w-full bg-[#00FFCC] text-black py-4 rounded-none font-black text-lg shadow-[0_0_20px_rgba(0,255,204,0.5)] hover:bg-[#55FFDD] transition-all active:scale-95 uppercase",
+                cardClass: "booking-card bg-[#0A0A0A] p-6 border border-[#00FFCC]/10 flex items-center justify-between group cursor-pointer hover:border-[#00FFCC] hover:bg-[#00FFCC]/5 transition-all",
+                cardIconBgClass: "w-14 h-14 bg-[#00FFCC]/10 flex items-center justify-center text-[#00FFCC]",
+                cardIconClass: "material-symbols-outlined text-2xl",
+                cardTitleClass: "font-bold text-white text-lg group-hover:text-[#00FFCC] transition-colors uppercase",
+                cardPriceClass: "text-xs font-bold text-[#00FFCC]/70",
+                cardChevronBgClass: "w-10 h-10 border border-[#00FFCC]/20 group-hover:bg-[#00FFCC] group-hover:text-black flex items-center justify-center transition-all text-[#00FFCC]"
+            },
+            editorial: {
+                body: "bg-white text-black !font-['Syne']",
+                header: "bg-white border-b-8 border-black pt-24 pb-20 px-4 transition-colors duration-500",
+                logo: "w-32 h-32 rounded-none bg-black flex items-center justify-center text-white shadow-none transition-colors duration-500",
+                badge: "text-[10px] px-2 py-0.5 border-2 border-black text-black font-black uppercase tracking-tighter transition-colors duration-500",
+                title: "text-7xl font-black text-black mb-6 tracking-tighter transition-colors duration-500 uppercase leading-[0.85]",
+                desc: "text-xl text-black/60 leading-tight max-w-xl transition-colors duration-500 font-bold",
+                pill1: "flex items-center gap-2 text-black bg-transparent border-t-2 border-black pt-2 rounded-none text-sm font-black uppercase transition-colors duration-500",
+                pill2: "flex items-center gap-2 text-black bg-transparent border-t-2 border-black pt-2 rounded-none text-sm font-black uppercase transition-colors duration-500",
+                servicesTitle: "text-4xl font-black text-black tracking-tighter uppercase mb-12 transition-colors duration-500",
+                portfolioTitle: "text-6xl font-black text-black tracking-tighter uppercase pt-16 border-t-8 border-black transition-colors duration-500",
+                sidebar: "bg-black p-10 text-white rounded-none shadow-none sticky top-8 transition-colors duration-500",
+                sidebarDesc: "text-white/60 text-base mb-10 leading-snug font-bold transition-colors duration-500",
+                sidebarLabelClass: "text-white/40 text-xs uppercase font-black mb-1 block",
+                sidebarClosedClass: "font-black text-white/30 italic",
+                sidebarBorderClass: "border-white/20",
+                sidebarBtn: "w-full bg-white text-black py-6 rounded-none font-black text-2xl shadow-none hover:bg-black hover:text-white hover:border-2 hover:border-white transition-all active:scale-95 uppercase tracking-tighter",
+                cardClass: "booking-card bg-white p-10 border-b-4 border-black flex items-center justify-between group cursor-pointer hover:bg-black hover:text-white transition-all",
+                cardIconBgClass: "w-20 h-20 bg-black text-white flex items-center justify-center transition-all group-hover:bg-white group-hover:text-black",
+                cardIconClass: "material-symbols-outlined text-4xl font-black",
+                cardTitleClass: "font-black text-4xl group-hover:text-white transition-colors uppercase leading-none tracking-tighter",
+                cardPriceClass: "text-lg font-black italic",
+                cardChevronBgClass: "w-16 h-16 bg-black text-white flex items-center justify-center transition-all group-hover:bg-white group-hover:text-black"
             }
         };
 
@@ -259,6 +365,7 @@
             document.getElementById('theme-sidebar').className = theme.sidebar;
             document.getElementById('theme-sidebar-desc').className = theme.sidebarDesc;
             document.getElementById('theme-sidebar-btn').className = theme.sidebarBtn;
+            document.getElementById('theme-portfolio-title').className = theme.portfolioTitle || theme.servicesTitle;
 
             document.querySelectorAll('.theme-sidebar-label').forEach(el => el.className = `theme-sidebar-label ${theme.sidebarLabelClass}`);
             document.querySelectorAll('.theme-sidebar-closed').forEach(el => el.className = `theme-sidebar-closed ${theme.sidebarClosedClass}`);
@@ -340,7 +447,28 @@
             }
             
             renderWorkingHours(data.working_hours);
+            renderPortfolio(data.portfolio);
             applyTheme(data.theme_id || 'classic');
+        }
+
+        function renderPortfolio(portfolio) {
+            const section = document.getElementById('portfolio-section');
+            const grid = document.getElementById('portfolio-grid');
+            
+            if (!portfolio || portfolio.length === 0) {
+                section.classList.add('hidden');
+                return;
+            }
+
+            section.classList.remove('hidden');
+            grid.innerHTML = '';
+            
+            portfolio.forEach(img => {
+                const imgEl = document.createElement('div');
+                imgEl.className = 'aspect-square rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 shadow-sm transition-all hover:scale-[1.02] cursor-zoom-in';
+                imgEl.innerHTML = `<img src="${img}" class="w-full h-full object-cover">`;
+                grid.appendChild(imgEl);
+            });
         }
 
         function renderWorkingHours(workingHours) {
