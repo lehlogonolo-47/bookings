@@ -59,8 +59,8 @@
                 <div class="h-5 w-3/4 max-w-sm bg-slate-200 animate-pulse rounded-lg mx-auto md:mx-0"></div>
 
                 <div class="flex flex-wrap gap-4 mt-6 justify-center md:justify-start">
-                    <div class="h-8 w-32 bg-slate-200 animate-pulse rounded-lg"></div>
-                    <div class="h-8 w-40 bg-slate-200 animate-pulse rounded-lg"></div>
+                    <div class="h-10 w-48 bg-slate-200 animate-pulse rounded-lg"></div>
+                    <div class="h-10 w-40 bg-slate-200 animate-pulse rounded-lg"></div>
                 </div>
             </div>
         </div>
@@ -469,15 +469,15 @@
                         <p id="biz-desc-text" class="text-lg text-slate-600 leading-relaxed max-w-2xl transition-colors duration-500">${data.description || 'Welcome to our booking page.'}</p>
 
                         <div class="flex flex-wrap gap-4 mt-6 justify-center md:justify-start">
-                            <div id="theme-pill-1" class="flex items-center gap-2 text-slate-500 bg-slate-100 px-3 py-1.5 rounded-lg text-sm transition-colors duration-500">
-                                <span class="material-symbols-outlined text-sm">location_on</span>
-                                <span>Online Booking</span>
+                            <div id="theme-pill-1" class="${data.address ? 'flex' : 'hidden'} items-center gap-2 text-slate-500 bg-slate-100 px-4 py-2 rounded-xl text-sm transition-colors duration-500">
+                                <span class="material-symbols-outlined text-sm text-slate-400">location_on</span>
+                                <span class="font-medium">${data.address || ''}</span>
                             </div>
-                            <div id="theme-pill-2" class="flex items-center gap-2 text-slate-500 bg-slate-100 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-500">
+                            <div id="theme-pill-2" class="flex items-center gap-2 text-slate-500 bg-slate-100 px-4 py-2 rounded-xl text-sm font-medium transition-colors duration-500">
                                 <span id="theme-pill-icon" class="material-symbols-outlined text-sm text-green-500">check_circle</span>
                                 <span id="biz-email-text">${data.email}</span>
                             </div>
-                            <a id="biz-phone-pill" href="tel:${data.phone_number}" class="${data.phone_number ? 'flex' : 'hidden'} items-center gap-2 text-white bg-slate-900 px-4 py-1.5 rounded-lg text-sm font-bold hover:bg-slate-800 transition-all active:scale-95">
+                            <a id="biz-phone-pill" href="tel:${data.phone_number}" class="${data.phone_number ? 'flex' : 'hidden'} items-center gap-2 text-white bg-slate-900 px-4 py-2 rounded-xl text-sm font-bold hover:bg-slate-800 transition-all active:scale-95">
                                 <span class="material-symbols-outlined text-sm">call</span>
                                 <span id="biz-phone-text">${data.phone_number}</span>
                             </a>
@@ -576,25 +576,50 @@
             
             const theme = window.currentThemeConfig;
 
-            services.forEach(service => {
-                const card = document.createElement('div');
-                card.className = theme.cardClass;
-                card.onclick = () => openBooking(service);
-                card.innerHTML = `
-                        <div class="flex items-center gap-5">
-                            <div class="${theme.cardIconBgClass}">
-                                <span class="${theme.cardIconClass}">medical_services</span>
+            // Group services by category
+            const groups = {};
+            services.forEach(s => {
+                const cat = s.category || 'General';
+                if (!groups[cat]) groups[cat] = [];
+                groups[cat].push(s);
+            });
+
+            // Sort categories (General last)
+            const categories = Object.keys(groups).sort((a, b) => {
+                if (a === 'General') return 1;
+                if (b === 'General') return -1;
+                return a.localeCompare(b);
+            });
+
+            categories.forEach(category => {
+                // Category Header (if more than one category exists or if it's not General)
+                if (categories.length > 1) {
+                    const header = document.createElement('div');
+                    header.className = 'col-span-full pt-8 pb-3 border-b border-slate-100 mb-2';
+                    header.innerHTML = `<h3 class="text-sm font-black uppercase tracking-widest text-slate-400">${category}</h3>`;
+                    grid.appendChild(header);
+                }
+
+                groups[category].forEach(service => {
+                    const card = document.createElement('div');
+                    card.className = theme.cardClass;
+                    card.onclick = () => openBooking(service);
+                    card.innerHTML = `
+                            <div class="flex items-center gap-5">
+                                <div class="${theme.cardIconBgClass}">
+                                    <span class="${theme.cardIconClass}">medical_services</span>
+                                </div>
+                                <div>
+                                    <h4 class="${theme.cardTitleClass}">${service.name}</h4>
+                                    <p class="${theme.cardPriceClass}">${service.price}</p>
+                                </div>
                             </div>
-                            <div>
-                                <h4 class="${theme.cardTitleClass}">${service.name}</h4>
-                                <p class="${theme.cardPriceClass}">${service.price}</p>
+                            <div class="${theme.cardChevronBgClass}">
+                                <span class="material-symbols-outlined">chevron_right</span>
                             </div>
-                        </div>
-                        <div class="${theme.cardChevronBgClass}">
-                            <span class="material-symbols-outlined">chevron_right</span>
-                        </div>
-                    `;
-                grid.appendChild(card);
+                        `;
+                    grid.appendChild(card);
+                });
             });
         }
 

@@ -196,7 +196,13 @@
                     <div class="bg-slate-50 rounded-3xl border border-slate-200 shadow-sm p-6 md:p-8">
                         <div class="flex items-center justify-between mb-6">
                             <h3 class="text-xl font-bold text-slate-900">Booking Analytics</h3>
-                            <span class="text-xs font-bold text-slate-600 bg-slate-100 px-3 py-1 rounded-full">Last 7 Days</span>
+                            <select id="analytics-range" onchange="renderAnalyticsChart(this.value)" 
+                                class="text-xs font-bold text-slate-600 bg-white border border-slate-200 px-3 py-1.5 rounded-xl focus:ring-2 focus:ring-slate-900/10 outline-none transition-all cursor-pointer">
+                                <option value="7">Last 7 Days</option>
+                                <option value="14">Last 14 Days</option>
+                                <option value="30">Last 1 Month</option>
+                                <option value="90">Last 3 Months</option>
+                            </select>
                         </div>
                         <div class="relative h-72 w-full">
                             <canvas id="analyticsChart"></canvas>
@@ -270,6 +276,11 @@
                                 <label class="block text-sm font-bold text-slate-700 mb-2">Description</label>
                                 <textarea id="edit-biz-desc" rows="4"
                                     class="w-full px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-2">Business Address</label>
+                                <input type="text" id="edit-biz-address" placeholder="e.g. 123 Main St, Cape Town"
+                                    class="w-full px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl">
                             </div>
                             <div>
                                 <label class="block text-sm font-bold text-slate-700 mb-2">Contact Email</label>
@@ -392,10 +403,21 @@
         <div class="bg-white rounded-3xl w-full max-w-md p-8 shadow-2xl">
             <h3 class="text-2xl font-bold mb-6">Add Service</h3>
             <div class="space-y-4">
-                <input type="text" id="new-service-name" placeholder="Service Name"
-                    class="w-full px-5 py-3 border border-slate-200 rounded-xl">
-                <input type="text" id="new-service-price" placeholder="Price (e.g. R500)"
-                    class="w-full px-5 py-3 border border-slate-200 rounded-xl">
+                <div>
+                    <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1 ml-1">Service Name</label>
+                    <input type="text" id="new-service-name" placeholder="e.g. Haircut"
+                        class="w-full px-5 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-900/10 outline-none">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1 ml-1">Price</label>
+                    <input type="text" id="new-service-price" placeholder="e.g. R500"
+                        class="w-full px-5 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-900/10 outline-none">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1 ml-1">Category (Optional)</label>
+                    <input type="text" id="new-service-category" placeholder="e.g. Nails, Massage, Hair"
+                        class="w-full px-5 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-900/10 outline-none">
+                </div>
                 <div class="flex gap-4 mt-6">
                     <button onclick="closeServiceModal()"
                         class="flex-1 py-3 bg-slate-100 text-slate-600 rounded-xl font-bold">Cancel</button>
@@ -693,18 +715,23 @@
             }
         }
 
-        function renderAnalyticsChart() {
+        function renderAnalyticsChart(days = 7) {
             const ctx = document.getElementById('analyticsChart');
             if (!ctx) return;
 
-            // Generate last 7 days array
+            days = parseInt(days);
+            
+            // Generate dates array based on range
             const dates = [];
             const counts = [];
-            for (let i = 6; i >= 0; i--) {
+            for (let i = days - 1; i >= 0; i--) {
                 const d = new Date();
                 d.setDate(d.getDate() - i);
                 const dateString = d.toISOString().split('T')[0];
-                dates.push(dateString);
+                
+                // For labels, show Month Day (e.g. Apr 13)
+                const label = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                dates.push(label);
                 
                 // Count bookings for this date (excluding rejected)
                 const dayCount = bookings.filter(b => b.booking_date === dateString && b.status !== 'rejected').length;
@@ -738,6 +765,25 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: {
+                                autoSkip: true,
+                                maxTicksLimit: 10,
+                                maxRotation: 0,
+                                font: { size: 10, family: 'Inter' }
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: '#f1f5f9' },
+                            ticks: {
+                                stepSize: 1,
+                                font: { size: 10, family: 'Inter' }
+                            }
+                        }
+                    },
                     plugins: {
                         legend: { display: false },
                         tooltip: {
@@ -807,6 +853,7 @@
         function fillSettings() {
             document.getElementById('edit-biz-name').value = bizData.name || '';
             document.getElementById('edit-biz-desc').value = bizData.description || '';
+            document.getElementById('edit-biz-address').value = bizData.address || '';
             document.getElementById('edit-biz-email').value = bizData.email || '';
             document.getElementById('edit-biz-phone').value = bizData.phone_number || '';
             document.getElementById('edit-biz-theme').value = bizData.theme_id || 'classic';
@@ -970,21 +1017,26 @@
                 };
             });
 
-            const updatedBiz = {
-                name: document.getElementById('edit-biz-name').value,
-                description: document.getElementById('edit-biz-desc').value,
-                email: document.getElementById('edit-biz-email').value,
-                phone_number: document.getElementById('edit-biz-phone').value,
-                theme_id: document.getElementById('edit-biz-theme').value,
-                profile_picture: selectedProfilePicBase64,
-                working_hours: workingHours,
-                portfolio: portfolioImages
-            };
+            const name = document.getElementById('edit-biz-name').value;
+            const desc = document.getElementById('edit-biz-desc').value;
+            const address = document.getElementById('edit-biz-address').value;
+            const phone = document.getElementById('edit-biz-phone').value;
+            const email = document.getElementById('edit-biz-email').value;
 
             try {
                 const { error } = await window.supabaseClient
                     .from('businesses')
-                    .update(updatedBiz)
+                    .update({
+                        name: name,
+                        description: desc,
+                        address: address,
+                        phone_number: phone,
+                        email: email,
+                        theme_id: document.getElementById('edit-biz-theme').value,
+                        profile_picture: selectedProfilePicBase64,
+                        working_hours: workingHours,
+                        portfolio: portfolioImages
+                    })
                     .eq('id', userId);
 
                 if (error) throw error;
@@ -996,33 +1048,41 @@
             }
         }
 
-        function openServiceModal() { document.getElementById('service-modal').classList.remove('hidden'); }
+        function openServiceModal() {
+            document.getElementById('new-service-name').value = '';
+            document.getElementById('new-service-price').value = '';
+            document.getElementById('new-service-category').value = '';
+            document.getElementById('service-modal').classList.remove('hidden');
+        }
         function closeServiceModal() { document.getElementById('service-modal').classList.add('hidden'); }
 
         async function saveNewService() {
             const name = document.getElementById('new-service-name').value;
             const price = document.getElementById('new-service-price').value;
+            const category = document.getElementById('new-service-category').value;
             
-            if (name && price) {
-                try {
-                    const { error } = await window.supabaseClient
-                        .from('services')
-                        .insert([{
-                            business_id: userId,
-                            name: name,
-                            price: price
-                        }]);
+            if (!name || !price) {
+                showToast('Please fill in service name and price', 'error');
+                return;
+            }
 
-                    if (error) throw error;
+            try {
+                const { error } = await window.supabaseClient
+                    .from('services')
+                    .insert([{
+                        business_id: userId,
+                        name: name,
+                        price: price,
+                        category: category || null
+                    }]);
 
-                    await loadAllData();
-                    closeServiceModal();
-                    document.getElementById('new-service-name').value = '';
-                    document.getElementById('new-service-price').value = '';
-                    showToast("Service added", "success");
-                } catch (err) {
-                    showToast("Error adding service: " + err.message, "error");
-                }
+                if (error) throw error;
+
+                await loadAllData();
+                closeServiceModal();
+                showToast("Service added", "success");
+            } catch (err) {
+                showToast("Error adding service: " + err.message, "error");
             }
         }
 
